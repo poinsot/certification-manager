@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>certification-manager</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Project : Certification Manager</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
