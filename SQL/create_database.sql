@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `certif_manager`.`candidate` (
   `pwd` VARCHAR(255) NOT NULL COMMENT '',
   `birthdate` DATE NOT NULL COMMENT '',
   `inscription_validate` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '',
+  `validation_code` VARCHAR(65) NOT NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '')
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -49,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `certif_manager`.`trainer` (
   `pwd` VARCHAR(255) NOT NULL COMMENT '',
   `birthdate` DATE NOT NULL COMMENT '',
   `inscription_validate` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '',
+  `validation_code` VARCHAR(65) NOT NULL COMMENT'',
   PRIMARY KEY (`id`)  COMMENT '',
   UNIQUE INDEX `mail_UNIQUE` (`mail` ASC)  COMMENT '')
 ENGINE = InnoDB
