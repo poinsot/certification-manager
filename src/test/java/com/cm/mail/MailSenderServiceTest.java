@@ -9,17 +9,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cm.AppConfig;
+import com.cm.CertificationManagerApplication;
 import com.cm.service.FakeMailSenderService;
 import com.icegreen.greenmail.junit.GreenMailRule;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={AppConfig.class})
+@SpringApplicationConfiguration(classes=CertificationManagerApplication.class)
 public class MailSenderServiceTest {
 	
 	@Rule
