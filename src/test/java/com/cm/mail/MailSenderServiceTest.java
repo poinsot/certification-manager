@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.cm.AppConfig;
 import com.cm.CertificationManagerApplication;
 import com.cm.service.FakeMailSenderService;
 import com.icegreen.greenmail.junit.GreenMailRule;
