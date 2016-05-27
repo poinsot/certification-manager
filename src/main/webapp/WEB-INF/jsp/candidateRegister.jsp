@@ -11,17 +11,17 @@ pageEncoding="UTF-8"%>
 </head>
 <body>
     <h2>Candidate Register</h2>
- <form action="#" th:action="@{/login}" th:object="${candidate}" method="post">
+ <form action=""  method="post">
         <table>
-            <tr><td>Last Name: </td><td><input name="lastname" th:field="*{lastname}"></td></tr>
-            <tr><td>First Name: </td><td><input name="firstname" th:field="*{firstname}"></td></tr>
-            <tr><td>Identity Card Number: </td><td><input name="id_card_number" th:field="*{id_card_number}" placeholder="000000000000" ></td></tr>
-            <tr><td>E-mail: </td><td><input name="mail" th:field="*{mail}" placeholder="yourname@email.com" ></td></tr>
+            <tr><td>Last Name: </td><td><input name="lastname" ></td></tr>
+            <tr><td>First Name: </td><td><input name="firstname"></td></tr>
+            <tr><td>Identity Card Number: </td><td><input name="id_card_number"  placeholder="000000000000" ></td></tr>
+            <tr><td>E-mail: </td><td><input name="mail" placeholder="yourname@email.com" ></td></tr>
          
-            <tr><td>Password: </td><td><input name="pwd" type="password" th:field="*{pwd}"></td></tr>
+            <tr><td>Password: </td><td><input name="pwd" type="password" ></td></tr>
             <tr><td>--password: at least 8 characters(letter or number or _ ),at least :1 capital letter and 1 number</td><td>
             
-            <tr><td>Birthday: </td><td><input name="birthday" th:field="birthday" placeholder="JJ/MM/YYYY"> </td></tr>
+            <tr><td>Birthday: </td><td><input name="birthday" placeholder="JJ/MM/YYYY"> </td></tr>
             <tr><td colspan="2" align="right"><input type="submit" value="Submit" ></td></tr>
         </table>
     </form>
