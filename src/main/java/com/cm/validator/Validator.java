@@ -2,6 +2,7 @@ package com.cm.validator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Validator {
 	
@@ -83,7 +84,8 @@ public class Validator {
 	 * false otherwise
 	 */
 	public static boolean validateBirthDate(String birthDate) {
-		return dateValidator(birthDate, "dd/MM/yyyy");
+		
+		return birthDate != null && dateValidator(birthDate, "dd/MM/yyyy");
 	}
 
 	/**
@@ -92,16 +94,27 @@ public class Validator {
 	 * @return true if the date match the pattern
 	 * false otherwise
 	 */
-	public static boolean dateValidator(String date, String pattern) {
+	private static boolean dateValidator(String dateToValidate, String pattern) {
+		if(dateToValidate == null){
+			return false;
+		}
+		
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		sdf.setLenient(false);
 		
 		try {
-			sdf.parse(date);
+			
+			//if not valid, it will throw ParseException
+			Date date = sdf.parse(dateToValidate);
+			//System.out.println(date);
+		
 		} catch (ParseException e) {
+			
 			return false;
 		}
 		
 		return true;
 	}
+		
 
 }

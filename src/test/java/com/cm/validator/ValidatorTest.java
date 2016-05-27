@@ -50,7 +50,7 @@ public class ValidatorTest {
 		assertFalse("expect False, even if escaped (preceded by a backslash), spaces, quotes, and backslashes must still be contained by quotes", Validator.validateMail("this\\ still\\\"not\\\\allowed@example.com"));
 		assertFalse("expect False, double dot before @", Validator.validateMail("john..doe@example.com"));
 		assertFalse("expect False, double dot after @", Validator.validateMail("john.doe@example..com"));
-		assertTrue("expect True", Validator.validateMail("prettyandsimple@example.com"));		  
+		assertTrue("expect True", Validator.validateMail("jenkins@hj.hui"));		  
 	}
 
 	@Test
@@ -71,6 +71,22 @@ public class ValidatorTest {
 		assertTrue("expect True", Validator.validateLastName("Val"));		  
 		assertTrue("expect True", Validator.validateLastName("V"));
 		assertTrue("expect True", Validator.validateLastName("v"));	
+	}
+	
+	@Test
+	public void validateBirthDate(){
+		assertFalse("expect False, null", Validator.validateBirthDate(null));
+		assertFalse("expect False, day < 0", Validator.validateBirthDate("-1/02/1991"));
+		assertFalse("expect False, days > days on month", Validator.validateBirthDate("32/02/1991"));
+		assertFalse("expect False, month < 0", Validator.validateBirthDate("01/-2/1991"));
+		assertFalse("expect False, month > 12", Validator.validateBirthDate("05/13/1991"));
+		assertFalse("expect False, month < 0", Validator.validateBirthDate("01/02/-199"));
+		
+		assertFalse("expect False, not bissextile", Validator.validateBirthDate("29/02/2011"));
+		assertFalse("expect False, 30 days in April", Validator.validateBirthDate("31/04/2012"));
+		
+		assertTrue("expect True", Validator.validateBirthDate("29/02/2012"));	
+		assertTrue("expect True", Validator.validateBirthDate("2/2/1991"));		  
 	}
 
 }
