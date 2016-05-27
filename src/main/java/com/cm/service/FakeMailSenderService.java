@@ -28,7 +28,7 @@ public class FakeMailSenderService {
 	 * Send a confirmation code to new users by e-mail.
 	 * @param to, new user e-mail
 	 * @param confirmationCode, unique confirmation code
-	 * @throws InvalidEmailAdressException  if to is not a well-formed e-mail adress
+	 * @throws InvalidEmailAdressException if to is not a well-formed e-mail adress
 	 * @throws ConfirmationCodeEmptyException if confirmationCode is empty
 	 */
 	public void sendConfirmationCodeCandidate(String to, String confirmationCode) throws InvalidEmailAdressException {
