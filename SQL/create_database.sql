@@ -25,16 +25,16 @@ USE `certif_manager` ;
 -- Table `certif_manager`.`candidate`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `certif_manager`.`candidate` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `name` VARCHAR(100) NOT NULL COMMENT '',
-  `firstname` VARCHAR(100) NOT NULL COMMENT '',
-  `id_card_number` VARCHAR(12) NOT NULL COMMENT '',
-  `mail` VARCHAR(255) NOT NULL COMMENT '',
-  `pwd` VARCHAR(255) NOT NULL COMMENT '',
-  `birthdate` DATE NOT NULL COMMENT '',
-  `inscription_validate` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '',
-  `validation_code` VARCHAR(65) NOT NULL COMMENT '',
-  PRIMARY KEY (`id`)  COMMENT '')
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `lastname` VARCHAR(100) NOT NULL ,
+  `firstname` VARCHAR(100) NOT NULL ,
+  `id_card_number` VARCHAR(12) NOT NULL UNIQUE,
+  `mail` VARCHAR(255) NOT NULL UNIQUE,
+  `pwd` VARCHAR(255) NOT NULL ,
+  `birthdate` DATE NOT NULL ,
+  `inscription_validate` TINYINT(1) NOT NULL DEFAULT '0' ,
+  `validation_code` VARCHAR(65) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)  )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
@@ -43,16 +43,16 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `certif_manager`.`trainer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `certif_manager`.`trainer` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `lastname` VARCHAR(100) NOT NULL COMMENT '',
-  `firstname` VARCHAR(100) NOT NULL COMMENT '',
-  `mail` VARCHAR(255) NOT NULL COMMENT '',
-  `pwd` VARCHAR(255) NOT NULL COMMENT '',
-  `birthdate` DATE NOT NULL COMMENT '',
-  `inscription_validate` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '',
-  `validation_code` VARCHAR(65) NOT NULL COMMENT'',
-  PRIMARY KEY (`id`)  COMMENT '',
-  UNIQUE INDEX `mail_UNIQUE` (`mail` ASC)  COMMENT '')
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `lastname` VARCHAR(100) NOT NULL ,
+  `firstname` VARCHAR(100) NOT NULL ,
+  `mail` VARCHAR(255) NOT NULL ,
+  `pwd` VARCHAR(255) NOT NULL ,
+  `birthdate` DATE NOT NULL ,
+  `inscription_validate` TINYINT(1) NOT NULL DEFAULT '0' ,
+  `validation_code` VARCHAR(65) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)  ,
+  UNIQUE INDEX `mail_UNIQUE` (`mail` ASC)  )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
@@ -61,14 +61,15 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `certif_manager`.`certification`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `certif_manager`.`certification` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `percent_success` TINYINT(1) NOT NULL COMMENT '',
-  `nb_question` SMALLINT(6) NOT NULL COMMENT '',
-  `duration` INT(11) NOT NULL COMMENT '',
-  `description` TEXT NULL DEFAULT NULL COMMENT '',
-  `id_trainer` INT(11) NOT NULL COMMENT '',
-  PRIMARY KEY (`id`)  COMMENT '',
-  INDEX `id_trainer_idx` (`id_trainer` ASC)  COMMENT '',
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `title` VARCHAR(65) NOT NULL,
+  `percent_success` TINYINT(1) NOT NULL ,
+  `nb_question` SMALLINT(6) NOT NULL ,
+  `duration` INT(11) NOT NULL ,
+  `description` TEXT NULL DEFAULT NULL ,
+  `id_trainer` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`)  ,
+  INDEX `id_trainer_idx` (`id_trainer` ASC)  ,
   CONSTRAINT `certif_fk_trainer`
     FOREIGN KEY (`id_trainer`)
     REFERENCES `certif_manager`.`trainer` (`id`)
@@ -82,11 +83,11 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `certif_manager`.`question`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `certif_manager`.`question` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `text` TEXT NOT NULL COMMENT '',
-  `id_certif` INT(11) NOT NULL COMMENT '',
-  PRIMARY KEY (`id`)  COMMENT '',
-  INDEX `question_fk_certif_idx` (`id_certif` ASC)  COMMENT '',
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `text` TEXT NOT NULL ,
+  `id_certif` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`)  ,
+  INDEX `question_fk_certif_idx` (`id_certif` ASC)  ,
   CONSTRAINT `question_fk_certif`
     FOREIGN KEY (`id_certif`)
     REFERENCES `certif_manager`.`certification` (`id`)
@@ -99,12 +100,12 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `certif_manager`.`responses`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `certif_manager`.`responses` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `id_question` INT(11) NOT NULL COMMENT '',
-  `text` TINYTEXT NOT NULL COMMENT '',
-  `is_correct` TINYINT(1) NOT NULL COMMENT '',
-  PRIMARY KEY (`id`)  COMMENT '',
-  INDEX `response_fk_question_idx` (`id_question` ASC)  COMMENT '',
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `id_question` INT(11) NOT NULL ,
+  `text` TINYTEXT NOT NULL ,
+  `is_correct` TINYINT(1) NOT NULL ,
+  PRIMARY KEY (`id`)  ,
+  INDEX `response_fk_question_idx` (`id_question` ASC)  ,
   CONSTRAINT `response_fk_question`
     FOREIGN KEY (`id_question`)
     REFERENCES `certif_manager`.`question` (`id`)
@@ -117,16 +118,16 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `certif_manager`.`vouchers`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `certif_manager`.`vouchers` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
-  `id_candidate` INT(11) NOT NULL COMMENT '',
-  `id_certif` INT(11) NOT NULL COMMENT '',
-  `validate` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '',
-  `date_creation` DATE NOT NULL COMMENT '',
-  `voucher` VARCHAR(255) NOT NULL COMMENT '',
-  PRIMARY KEY (`id`)  COMMENT '',
-  UNIQUE INDEX `voucher_UNIQUE` (`voucher` ASC)  COMMENT '',
-  INDEX `voucher_fk_candidate_idx` (`id_candidate` ASC)  COMMENT '',
-  INDEX `voucher_fk_certif_idx` (`id_certif` ASC)  COMMENT '',
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `id_candidate` INT(11) NOT NULL ,
+  `id_certif` INT(11) NOT NULL ,
+  `validate` TINYINT(1) NOT NULL DEFAULT '1' ,
+  `date_creation` DATE NOT NULL ,
+  `voucher` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`)  ,
+  UNIQUE INDEX `voucher_UNIQUE` (`voucher` ASC)  ,
+  INDEX `voucher_fk_candidate_idx` (`id_candidate` ASC)  ,
+  INDEX `voucher_fk_certif_idx` (`id_certif` ASC)  ,
   CONSTRAINT `voucher_fk_candidate`
     FOREIGN KEY (`id_candidate`)
     REFERENCES `certif_manager`.`candidate` (`id`)
