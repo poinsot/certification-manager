@@ -15,36 +15,34 @@ import com.cm.CertificationManagerApplication;
 @SpringApplicationConfiguration(classes=CertificationManagerApplication.class)
 public class RandomCodeGeneratorTest {
 
-	@Autowired
-	private RandomCodeGenerator randomCodeGenerator;
 
 	@Test
 	public void lengthIsAsGiven() {
-		assertEquals(6, randomCodeGenerator.generateCode(6).length());
-		assertEquals(1, randomCodeGenerator.generateCode(1).length());
-		assertEquals(64, randomCodeGenerator.generateCode(64).length());
+		assertEquals(6, RandomCodeGenerator.generateCode(6).length());
+		assertEquals(1, RandomCodeGenerator.generateCode(1).length());
+		assertEquals(64, RandomCodeGenerator.generateCode(64).length());
 	}
 
 	@Test
 	public void isAlphanumeric() {
 		String pattern = "^[a-zA-Z0-9]*$";
-		String randomCode = randomCodeGenerator.generateCode(64);
+		String randomCode = RandomCodeGenerator.generateCode(64);
 		assertTrue(randomCode.matches(pattern));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void lengthIs0() {
-		randomCodeGenerator.generateCode(0);
+		RandomCodeGenerator.generateCode(0);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void lengthIsNegative() {
-		randomCodeGenerator.generateCode(-10);
+		RandomCodeGenerator.generateCode(-10);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void lengthIsTooBig() {
-		randomCodeGenerator.generateCode(66);
+		RandomCodeGenerator.generateCode(66);
 	}
 
 }
