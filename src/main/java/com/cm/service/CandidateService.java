@@ -78,7 +78,7 @@ public class CandidateService {
 		if(id_card_number == null){
 			throw new IllegalArgumentException("id_card_number is null");
 		}
-		return candidateRepository.findByAddress(id_card_number);
+		return candidateRepository.findByIdCard(id_card_number);
 		
 	}
 
