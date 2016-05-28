@@ -44,7 +44,7 @@ public class CandidateController {
 		return "candidateRegister";
 	}
 
-	
+
 	/**
 	 * get all value from the form to register a candidate
 	 * @param candidate : Candidate : the entity to register
@@ -64,7 +64,7 @@ public class CandidateController {
 		String birthDate = req.getParameter("birthday");
 
 		if(! Validator.validateFirstName(firstname)) {
-			
+
 			errors.putIfAbsent("firstName", "firstName invalid => + " + firstname);			
 		}
 
@@ -77,7 +77,7 @@ public class CandidateController {
 		}
 		else{
 			String pw_hash = BCrypt.hashpw(pwd, BCrypt.gensalt()); 
-            candidate.setPwd(pw_hash);
+			candidate.setPwd(pw_hash);
 
 		}
 
@@ -96,20 +96,23 @@ public class CandidateController {
 
 		if(errors.isEmpty()){
 			try{
-			candidateService.registerCandidate(candidate);
-			fakeMailSender.sendConfirmationCodeCandidate(mail, candidate.getValidation_code());
+				candidateService.registerCandidate(candidate);
+				//fakeMailSender.sendConfirmationCodeCandidate(mail, candidate.getValidation_code());
 			}catch(IllegalArgumentException e){
 				LOGGER.log(Level.SEVERE, e.toString(), e );
 			}catch(CandidateAlreadyExistException e){
+				LOGGER.log(Level.SEVERE, e.toString(), e );
 				return "redirect:/error/alreadyexist";
-				
-			}catch(Exception e){
+			}
+			catch(Exception e){
+				LOGGER.log(Level.SEVERE, e.toString(), e );
 				return "redirect:/error/database";
 			}
-			return "redirect:/";
+
+			return "redirect:confirmation";
 		}
 		model.addAttribute("candidate", candidate);
-		
+
 		return "candidateRegister";
 	}
 
@@ -124,16 +127,20 @@ public class CandidateController {
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		sdf.setLenient(false);
-		
+
 		try {
 			return sdf.parse(birthDate);
-			
+
 		} catch (ParseException e) {
 			return null;
 		}
 	}
-	
-	
-	
-	
+
+
+	@RequestMapping(path="/confirmation", 
+			method={RequestMethod.GET})
+	public String confirmationInscription(){
+		return "candidateRegisterConfirmation";
+	}
+
 }
