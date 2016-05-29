@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.cm.entity.Candidate;
 import com.cm.exception.CandidateAlreadyExistException;
 import com.cm.service.CandidateService;
-import com.cm.service.FakeMailSenderService;
+import com.cm.service.MailSenderService;
 import com.cm.validator.Validator;
 
 @Controller
@@ -34,7 +35,7 @@ public class CandidateController {
 	@Autowired
 	CandidateService candidateService;
 	@Autowired
-	FakeMailSenderService fakeMailSender;
+	MailSenderService mailSender;
 
 	/**
 	 * mapping to the jsp candidateRegister
@@ -99,7 +100,7 @@ public class CandidateController {
 		if(errors.isEmpty()){
 			try{
 				candidateService.registerCandidate(candidate);
-				//fakeMailSender.sendConfirmationCodeCandidate(mail, candidate.getValidation_code());
+				mailSender.sendConfirmationCode(mail, candidate.getValidation_code(), "Candidate");
 			}catch(IllegalArgumentException e){
 				LOGGER.log(Level.SEVERE, e.toString(), e );
 			}catch(CandidateAlreadyExistException e){
@@ -145,7 +146,7 @@ public class CandidateController {
 		return "candidateRegisterConfirmation";
 	}
 	
-	@RequestMapping(path="/confirmation/{confirmation_code}", 
+	@RequestMapping(path="/confirm/{confirmation_code}", 
 			method={RequestMethod.GET})
 	public String confirmationInscriptionDone(@PathVariable String confirmation_code){
 		List<Candidate>candidates = candidateService.findByValidationCode(confirmation_code);
