@@ -31,6 +31,29 @@ public class CandidateServiceTest {
 
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
+	
+	
+	private Candidate getMockCandidate(){
+
+		Candidate candidate = 
+				new Candidate();
+		candidate.setLastname("u");
+		candidate.setFirstname("u");;
+		candidate.setId_card_number("231456789012");
+		candidate.setMail("aze@rty.uiop");
+		candidate.setPwd("Azer7yui");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = sdf.parse("1991-05-07");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		candidate.setBirthdate(date);
+		return candidate;
+		
+	}
 
 	/** 
 	 * get IllegalArgumentException if calling registerCandidate from CandidateService with param null
@@ -42,13 +65,7 @@ public class CandidateServiceTest {
 
 	@Test
 	public void TryToRegisterCandidateWhereIdCardNumberAlreadyExistInDataBase(){
-		Candidate candidate = new Candidate();
-		candidate.setFirstname("z");
-		candidate.setLastname("z");
-		candidate.setId_card_number("123456789012");
-		candidate.setMail("jenkins@hj.hdddui");
-		candidate.setBirthdate(new Date());
-		candidate.setPwd("Azer7yuiop");
+		Candidate candidate = getMockCandidate();
 		exception.expect(CandidateAlreadyExistException.class);
 		candidateService.registerCandidate(candidate);
 		candidateService.registerCandidate(candidate);
@@ -56,13 +73,8 @@ public class CandidateServiceTest {
 
 	@Test
 	public void TryToRegisterCandidateWhereMailAlreadyExistInDataBase(){
-		Candidate candidate = new Candidate();
-		candidate.setFirstname("z");
-		candidate.setLastname("z");
-		candidate.setId_card_number("312456789012");
-		candidate.setMail("jenkins@hj.hui");
-		candidate.setBirthdate(new Date());
-		candidate.setPwd("Azer7yuiop");
+		Candidate candidate = getMockCandidate();
+		
 		exception.expect(CandidateAlreadyExistException.class);
 		candidateService.registerCandidate(candidate);
 		candidateService.registerCandidate(candidate);
@@ -71,19 +83,9 @@ public class CandidateServiceTest {
 
 
 	@Test
-	public void testCandidateCreate() throws Exception{
-
-		Candidate candidate = 
-				new Candidate();
-		candidate.setLastname("u");
-		candidate.setFirstname("u");;
-		candidate.setId_card_number("231456789012");
-		candidate.setMail("aze@rty.uiop");
-		candidate.setPwd("Azer7yui");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse("1991-05-07");
-		candidate.setBirthdate(date);
-
+	public void testCandidateCreate(){
+		Candidate candidate = getMockCandidate();
+		
 		candidateService.registerCandidate(candidate);
 
 		List<Candidate>  listC = candidateService.findByEmail(candidate.getMail());
@@ -102,28 +104,19 @@ public class CandidateServiceTest {
 	}
 
 	/**
+	 * test if find a candidate by his Email number
 	 * should get 1 row => list<Candidate>.size() == 1 and verification that the entity is loaded
 	 * @throws ParseException 
 	 */
 	@Test
-	public void testFindByMail() throws ParseException{
-		Candidate candidate = 
-				new Candidate();
-		candidate.setLastname("u");
-		candidate.setFirstname("u");;
-		candidate.setId_card_number("123456789123");
-		candidate.setMail("jenkins@hj.hui");
-		candidate.setPwd("Azer7yui");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse("1991-05-07");
-		candidate.setBirthdate(date);
-
+	public void testFindByMail(){
+		Candidate candidate = getMockCandidate();
 		candidateService.registerCandidate(candidate);
-		List<Candidate>  listC = candidateService.findByEmail("jenkins@hj.hui");
+		List<Candidate>  listC = candidateService.findByEmail(candidate.getMail());
 		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
 		Candidate candidateVerif = listC.get(0);
-		assertEquals("should be jenkins@hj.hui", "jenkins@hj.hui", candidateVerif.getMail());
-		assertEquals("should be 123456789123", "123456789123", candidateVerif.getId_card_number());
+		assertEquals("should be " + candidate.getMail(), candidate.getMail(), candidateVerif.getMail());
+		assertEquals("should be " + candidate.getId_card_number(), candidate.getId_card_number(), candidateVerif.getId_card_number());
 	}
 
 
@@ -136,28 +129,24 @@ public class CandidateServiceTest {
 	}
 	
 	/**
+	 * test if find a candidate by his Id card number
 	 * should get 1 row => list<Candidate>.size() == 1 and verification that the entity is loaded
 	 * @throws ParseException 
 	 */
 	@Test
-	public void testFindByIdCard() throws ParseException{
-		Candidate candidate = 
-				new Candidate();
-		candidate.setLastname("u");
-		candidate.setFirstname("u");;
-		candidate.setId_card_number("123456789123");
-		candidate.setMail("jenkins@hj.hui");
-		candidate.setPwd("Azer7yui");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse("1991-05-07");
-		candidate.setBirthdate(date);
+	public void testFindByIdCard(){
+		Candidate candidate = getMockCandidate();
 
 		candidateService.registerCandidate(candidate);
-		List<Candidate>  listC = candidateService.findByIdCard("123456789123");
+		List<Candidate>  listC = candidateService.findByIdCard(candidate.getId_card_number());
 		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
 		Candidate candidateVerif = listC.get(0);
-		assertEquals("should be jenkins@hj.hui", "jenkins@hj.hui", candidateVerif.getMail());
-		assertEquals("should be 123456789123", "123456789123", candidateVerif.getId_card_number());
+		assertEquals("should be " + candidate.getMail(), candidate.getMail(), candidateVerif.getMail());
+		assertEquals("should be " + candidate.getId_card_number(), candidate.getId_card_number(), candidateVerif.getId_card_number());
 	}
+	
+	
+
+	
 
 }

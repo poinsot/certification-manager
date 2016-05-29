@@ -60,7 +60,7 @@ public class Candidate {
 	
 	@NotNull
 	@Column(name="inscription_validate")
-	private Integer validate = 0; 
+	private Integer inscription_validate = 0; 
 	
 	@NotNull
 	@Column(name="validation_code")
@@ -118,8 +118,12 @@ public class Candidate {
 		return id;
 	}
 
-	public Integer getValidate() {
-		return validate;
+	public Integer getInscription_validate() {
+		return inscription_validate;
+	}
+
+	public void setInscription_validate(Integer inscription_validate) {
+		this.inscription_validate = inscription_validate;
 	}
 
 	public String getValidation_code() {
