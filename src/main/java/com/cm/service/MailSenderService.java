@@ -6,6 +6,7 @@ import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -21,6 +22,7 @@ import com.cm.exception.UnauthorizedEntityException;
  *
  */
 @Service
+@PropertySource("classpath:gmail.properties")
 public class MailSenderService {
 	private static final String EMAIL_SUBJECT = "Confirm your account";
 	private static final String CANDIDATE_CONFIRM_PATH = "http://localhost:8080/candidate/confirm/";
@@ -28,16 +30,16 @@ public class MailSenderService {
 	private static final String SENDER_EMAIL_ADRESS = "certificationmanager2016@gmail.com";
 //	private static final Logger LOGGER = Logger.getLogger(MailSenderService.class.getName());
 	
-	@Value("smtp.gmail.com")
+	@Value("${host}")
     private String host;
 
-    @Value("587")
+    @Value("${port}")
     private Integer port;
     
-    @Value("")
+    @Value("${gmail.password}")
     private String password;
     
-    @Value("certificationmanager2016")
+    @Value("${gmail.username}")
     private String username;
 
     @Bean
