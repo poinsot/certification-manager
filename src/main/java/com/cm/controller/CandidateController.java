@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -142,5 +144,20 @@ public class CandidateController {
 	public String confirmationInscription(){
 		return "candidateRegisterConfirmation";
 	}
+	
+	@RequestMapping(path="/confirmation/{confirmation_code}", 
+			method={RequestMethod.GET})
+	public String confirmationInscriptionDone(@PathVariable String confirmation_code){
+		List<Candidate>candidates = candidateService.findByValidationCode(confirmation_code);
+		if(candidates.size() == 0)
+			return "redirect:/error/confirmationcodeinvalide";
+		Candidate candidate = candidates.get(0);
+		candidateService.updateInscriptionValidateOfACandidate(candidate.getValidation_code());
+		candidate = candidateService.findByValidationCode(confirmation_code).get(0);
+		if(candidate.getInscription_validate() != 1){
+			
+		}
+		return "confirmOK";
+		}
 
 }
