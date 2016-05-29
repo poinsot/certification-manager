@@ -26,6 +26,13 @@ public class ErrorController {
 			method={RequestMethod.GET})
 	public static String candidateAlreadyExist() {
 		return "error_alreadyexist";
-	}	
+	}
+	
+	@RequestMapping(path="/confirmationcodeinvalide",
+			method={RequestMethod.GET})
+	public static String candidateDontExist() {
+		return "error_confirmation_code_invalide";
+	}
+	
 		
 }
