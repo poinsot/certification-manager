@@ -81,5 +81,34 @@ public class CandidateService {
 		return candidateRepository.findByIdCard(id_card_number);
 		
 	}
+	
+	/**
+	 * find a candidate in database by his code activation
+	 * @param id_card_number
+	 * @return Candidate entity if database contains a row where id_card_number match or null otherwise
+	 * @throws IllegalArgumentException if @param is null
+	 */
+	@Transactional
+	public List<Candidate> findByValidationCode(String activation_code){
+		if(activation_code == null){
+			throw new IllegalArgumentException("activation_code is null");
+		}
+		return candidateRepository.findByValidationCode(activation_code);
+		
+	}
+	
+	/**
+	 * Update a candidate in database with his inscription_validate to 1 
+	 * @param activation_code
+	 * @throws IllegalArgumentException if @param is null
+	 */
+	@Transactional
+	public void updateInscriptionValidateOfACandidate(String activation_code){
+		if(activation_code == null){
+			throw new IllegalArgumentException("activation_code is null");
+		}
+		candidateRepository.updateInscriptionValidateOfACandidate(Integer.valueOf(1), activation_code);
+		
+	}
 
 }

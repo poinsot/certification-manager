@@ -13,6 +13,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,9 @@ public class CandidateServiceTest {
 		candidateService.registerCandidate(null);
 	}
 
+	/**
+	 * expect a CandidateAlreadyExistException
+	 */
 	@Test
 	public void TryToRegisterCandidateWhereIdCardNumberAlreadyExistInDataBase(){
 		Candidate candidate = getMockCandidate();
@@ -71,6 +75,9 @@ public class CandidateServiceTest {
 		candidateService.registerCandidate(candidate);
 	}
 
+	/**
+	 * expect a CandidateAlreadyExistException
+	 */
 	@Test
 	public void TryToRegisterCandidateWhereMailAlreadyExistInDataBase(){
 		Candidate candidate = getMockCandidate();
@@ -82,6 +89,7 @@ public class CandidateServiceTest {
 
 
 
+	
 	@Test
 	public void testCandidateCreate(){
 		Candidate candidate = getMockCandidate();
@@ -104,9 +112,8 @@ public class CandidateServiceTest {
 	}
 
 	/**
-	 * test if find a candidate by his Email number
+	 * test find a candidate by his Email number
 	 * should get 1 row => list<Candidate>.size() == 1 and verification that the entity is loaded
-	 * @throws ParseException 
 	 */
 	@Test
 	public void testFindByMail(){
@@ -129,9 +136,8 @@ public class CandidateServiceTest {
 	}
 	
 	/**
-	 * test if find a candidate by his Id card number
+	 * test find a candidate by his Id card number
 	 * should get 1 row => list<Candidate>.size() == 1 and verification that the entity is loaded
-	 * @throws ParseException 
 	 */
 	@Test
 	public void testFindByIdCard(){
@@ -147,6 +153,56 @@ public class CandidateServiceTest {
 	
 	
 
+	/**
+	 * get IllegalArgumentException if calling findByActivationCode from CandidateService with param null
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void getCandidateByActivationCodeWithParamNull(){
+		candidateService.findByValidationCode(null);
+	}
 	
+	
+	/**
+	 * test find a candidate by his validation Code
+	 * should get 1 row => list<Candidate>.size() == 1 and verification that the entity is loaded
+	*/
+	@Test
+	public void testFindByValidateCode(){
+		Candidate candidate = getMockCandidate();
+		String validationCode = candidate.getValidation_code();
+
+		candidateService.registerCandidate(candidate);
+		List<Candidate>  listC = candidateService.findByValidationCode(validationCode);
+		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
+		Candidate candidateVerif = listC.get(0);
+		assertEquals("should be " + validationCode, validationCode, candidateVerif.getValidation_code());
+	}
+	
+	/**
+	 * get IllegalArgumentException if calling findByActivationCode from CandidateService with param null
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void updateInscriptionValidateOfACandidateWithParamNull(){
+		candidateService.updateInscriptionValidateOfACandidate(null);;
+	}
+	
+	
+	/**
+	 * test Update a candidate in database with his inscription_validate to 1 
+	 * should get 1 row => list<Candidate>.size() == 1 and verification that the entity is loaded and the update is done
+	 */
+	@Test
+	public void testUpdateInscriptionValidateOfACandidate(){
+		Candidate candidate = getMockCandidate();
+		String validationCode = candidate.getValidation_code();
+
+		candidateService.registerCandidate(candidate);
+		candidateService.updateInscriptionValidateOfACandidate(validationCode);
+		List<Candidate>  listC = candidateService.findByValidationCode(validationCode);
+		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
+		Candidate candidateVerif = listC.get(0);
+		assertEquals("should be " + validationCode, validationCode, candidateVerif.getValidation_code());
+		assertEquals("inscription_validate should be 1", Integer.valueOf(1), candidateVerif.getInscription_validate());
+	}
 
 }
