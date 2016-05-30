@@ -22,8 +22,8 @@
 
 	<div class="home_trainer">
 	<h2> Trainer </h2>
-<!-- 	<a href="/trainer/login" > Log In </a> -->
-<!-- 	<br> -->
+	<a href="/trainer/login" > Log In </a>
+	<br>
 	<a href="/trainer/register" > Create Account </a>
 	</div>
 		
