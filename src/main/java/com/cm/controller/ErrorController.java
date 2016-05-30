@@ -28,6 +28,11 @@ public class ErrorController {
 		return "error_alreadyexist";
 	}
 	
+	@RequestMapping(path="/tr_alreadyexist",method={RequestMethod.GET})
+	public static String trainerAlreadyExist() {
+		return "trainer_error_alreadyexist";
+	}
+	
 	@RequestMapping(path="/confirmationcodeinvalide",
 			method={RequestMethod.GET})
 	public static String candidateDontExist() {
