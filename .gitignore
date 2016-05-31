@@ -15,3 +15,6 @@ target/
 .settings/
 .project
 .springBeans
+
+#gmail.properties
+src/main/resources/gmail.properties

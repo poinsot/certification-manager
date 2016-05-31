@@ -149,15 +149,11 @@ public class CandidateController {
 	@RequestMapping(path="/confirm/{confirmation_code}", 
 			method={RequestMethod.GET})
 	public String confirmationInscriptionDone(@PathVariable String confirmation_code){
-		List<Candidate>candidates = candidateService.findByValidationCode(confirmation_code);
-		if(candidates.size() == 0)
+		Candidate candidate = candidateService.findByValidationCode(confirmation_code);
+		if(candidate == null)
 			return "redirect:/error/confirmationcodeinvalide";
-		Candidate candidate = candidates.get(0);
 		candidateService.updateInscriptionValidateOfACandidate(candidate.getValidation_code());
-		candidate = candidateService.findByValidationCode(confirmation_code).get(0);
-		if(candidate.getInscription_validate() != 1){
-			
-		}
+		candidate = candidateService.findByValidationCode(confirmation_code);
 		return "confirmOK";
 		}
 

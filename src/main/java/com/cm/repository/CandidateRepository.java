@@ -23,7 +23,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer>{
 	 * @return Liste of candidate that match the @param
 	 */
 	@Query(FIND_BY_ADDRESS_QUERY)
-	public List<Candidate> findByAddress(@Param("1")String email);
+	public Candidate findByAddress(@Param("1")String email);
 
 	/**
 	 * Find candidate by id_card_number.
@@ -31,7 +31,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer>{
 	 * @return Liste of candidate that match the @param
 	 */
 	@Query(FIND_BY_ID_CARD_QUERY)
-	public List<Candidate> findByIdCard(@Param("1")String id_card_number);
+	public Candidate findByIdCard(@Param("1")String id_card_number);
 
 	
 
@@ -41,7 +41,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer>{
 	 * @return Liste of candidate that match the @param
 	 */
 	@Query(FIND_BY_VALIDATION_CODE_QUERY)
-	public List<Candidate> findByValidationCode(@Param("1")String activation_code);
+	public Candidate findByValidationCode(@Param("1")String activation_code);
 
 	
 	/**

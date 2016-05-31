@@ -35,10 +35,10 @@ public class CandidateService {
 		if(candidate == null){
 			throw new IllegalArgumentException("candidate is null");
 		}
-		if(candidateRepository.findByAddress(candidate.getMail()).size() > 0){
+		if(candidateRepository.findByAddress(candidate.getMail()) != null){
 			throw new CandidateAlreadyExistException("Email already exist", new Throwable(candidate.getMail()));
 		}
-		if(candidateRepository.findByIdCard(candidate.getId_card_number()).size() >0){
+		if(candidateRepository.findByIdCard(candidate.getId_card_number()) != null){
 			throw new CandidateAlreadyExistException("Id_card_number already exist", new Throwable(candidate.getId_card_number()));
 		}
 		
@@ -46,10 +46,6 @@ public class CandidateService {
 		candidateRepository.save(candidate);
 	}
 	
-	@Transactional
-	public List<Candidate> findAll(){
-		return candidateRepository.findAll();
-	}
 	
 	/**
 	 * find a candidate in database by his Email
@@ -58,7 +54,7 @@ public class CandidateService {
 	 * @throws IllegalArgumentException if param is null
 	 */
 	@Transactional
-	public List<Candidate> findByEmail(String mail){
+	public Candidate findByEmail(String mail){
 		if(mail == null){
 			throw new IllegalArgumentException("mail is null");
 		}
@@ -74,7 +70,7 @@ public class CandidateService {
 	 * @throws IllegalArgumentException if @param is null
 	 */
 	@Transactional
-	public List<Candidate> findByIdCard(String id_card_number){
+	public Candidate findByIdCard(String id_card_number){
 		if(id_card_number == null){
 			throw new IllegalArgumentException("id_card_number is null");
 		}
@@ -89,7 +85,7 @@ public class CandidateService {
 	 * @throws IllegalArgumentException if @param is null
 	 */
 	@Transactional
-	public List<Candidate> findByValidationCode(String activation_code){
+	public Candidate findByValidationCode(String activation_code){
 		if(activation_code == null){
 			throw new IllegalArgumentException("activation_code is null");
 		}

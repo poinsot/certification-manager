@@ -96,10 +96,9 @@ public class CandidateServiceTest {
 		
 		candidateService.registerCandidate(candidate);
 
-		List<Candidate>  listC = candidateService.findByEmail(candidate.getMail());
-		assertEquals("size of array should be 0 and is " + listC.size(), 1, listC.size());
-		assertEquals("should be aze@rty.uiop", candidate.getMail(), listC.get(0).getMail());
-		assertEquals("should be 231456789012", candidate.getId_card_number(), listC.get(0).getId_card_number());
+		Candidate candidateVerif =  candidateService.findByEmail(candidate.getMail());
+		assertEquals("should be aze@rty.uiop", candidate.getMail(), candidateVerif.getMail());
+		assertEquals("should be 231456789012", candidate.getId_card_number(), candidateVerif.getId_card_number());
 	}
 
 
@@ -119,9 +118,7 @@ public class CandidateServiceTest {
 	public void testFindByMail(){
 		Candidate candidate = getMockCandidate();
 		candidateService.registerCandidate(candidate);
-		List<Candidate>  listC = candidateService.findByEmail(candidate.getMail());
-		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
-		Candidate candidateVerif = listC.get(0);
+		Candidate candidateVerif = candidateService.findByEmail(candidate.getMail());
 		assertEquals("should be " + candidate.getMail(), candidate.getMail(), candidateVerif.getMail());
 		assertEquals("should be " + candidate.getId_card_number(), candidate.getId_card_number(), candidateVerif.getId_card_number());
 	}
@@ -144,9 +141,7 @@ public class CandidateServiceTest {
 		Candidate candidate = getMockCandidate();
 
 		candidateService.registerCandidate(candidate);
-		List<Candidate>  listC = candidateService.findByIdCard(candidate.getId_card_number());
-		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
-		Candidate candidateVerif = listC.get(0);
+		Candidate candidateVerif = candidateService.findByIdCard(candidate.getId_card_number());
 		assertEquals("should be " + candidate.getMail(), candidate.getMail(), candidateVerif.getMail());
 		assertEquals("should be " + candidate.getId_card_number(), candidate.getId_card_number(), candidateVerif.getId_card_number());
 	}
@@ -172,9 +167,7 @@ public class CandidateServiceTest {
 		String validationCode = candidate.getValidation_code();
 
 		candidateService.registerCandidate(candidate);
-		List<Candidate>  listC = candidateService.findByValidationCode(validationCode);
-		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
-		Candidate candidateVerif = listC.get(0);
+		Candidate  candidateVerif = candidateService.findByValidationCode(validationCode);
 		assertEquals("should be " + validationCode, validationCode, candidateVerif.getValidation_code());
 	}
 	
@@ -198,9 +191,7 @@ public class CandidateServiceTest {
 
 		candidateService.registerCandidate(candidate);
 		candidateService.updateInscriptionValidateOfACandidate(validationCode);
-		List<Candidate>  listC = candidateService.findByValidationCode(validationCode);
-		assertEquals("size of array should be 1 and is " + listC.size(), 1, listC.size());
-		Candidate candidateVerif = listC.get(0);
+		Candidate candidateVerif = candidateService.findByValidationCode(validationCode);
 		assertEquals("should be " + validationCode, validationCode, candidateVerif.getValidation_code());
 		assertEquals("inscription_validate should be 1", Integer.valueOf(1), candidateVerif.getInscription_validate());
 	}
