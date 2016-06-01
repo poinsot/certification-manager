@@ -47,8 +47,7 @@ function cleanWarningAndErrorMessages() {
 	document.querySelector('.warning').innerHTML = "";
 }
 
-function buildCertificationJSON() {
-	cleanWarningAndErrorMessages();
+function validator(){
 	if (document.getElementById('title').value.length < 3) {
 		addErrorMessage("Title of certification must be at least 3 characters", ".title");
 	}
@@ -58,6 +57,11 @@ function buildCertificationJSON() {
 	if (document.getElementById('percent_success').value == "") {
 		addErrorMessage("Passing score is empty", ".percent_success");
 	}
+}
+
+function buildCertificationJSON() {
+	cleanWarningAndErrorMessages();
+	validator();
 	certificationJSON.title = document.getElementById('title').value;
 	certificationJSON.percent_success = document.getElementById('percent_success').value;
 	certificationJSON.nb_question = document.getElementById('nb_question').value;
@@ -72,7 +76,11 @@ function buildCertificationJSON() {
 function saveOnServer() {
 	buildCertificationJSON();
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("POST", window.location.href);
-	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(JSON.stringify(certificationJSON));
+	var errors = document.getElementsByClassName('error');
+	console.log("" + errors.length);
+	if(errors.length == 0){
+		xmlhttp.open("POST", window.location.href);
+		xmlhttp.setRequestHeader("Content-Type", "application/json");
+		xmlhttp.send(JSON.stringify(certificationJSON));
+	}
 }
