@@ -11,7 +11,8 @@ public class MockCertif {
 	public static Certification getCertif(){
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return  mapper.readValue(new File("C:\\Users\\Val\\Desktop\\certification-manager\\src\\main\\resources\\jsonexemple.json"), Certification.class);
+			System.out.println(System.getProperty("user.dir"));
+			return  mapper.readValue(new File("src/main/resources/jsonexemple.json"), Certification.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
