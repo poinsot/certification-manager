@@ -69,6 +69,10 @@ function saveQuestion() {
 		console.log(JSON.stringify(questionJSON));
 		certificationJSON.questions.push(questionJSON);
 		console.log(JSON.stringify(certificationJSON));
+		document.getElementById("textQuestion").value = "";
+		var answers = document.getElementsByClassName('answers')[0];
+		answers.innerHTML = '<p>Answers:</p><div id="answer1" class="answer"><input name="answertext1" id="answertext1" type="text"> <input name="answeristrue1" id="answeristrue1" type="checkbox"> <a href="" class="removeanswer">Remove</a></div><div id="answer2" class="answer"><input name="answertext2" id="answertext2" type="text"> <inputname="answeristrue2" id="answeristrue2" type="checkbox"> <a href="" class="removeanswer">Remove</a>
+	</div>';
 	} else {
 		console.log("Error: question");
 	}
