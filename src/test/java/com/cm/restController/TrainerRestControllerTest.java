@@ -36,7 +36,7 @@ public class TrainerRestControllerTest {
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public void parseJson() throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		Certification certif = mapper.readValue(new File("C:\\Users\\Val\\Desktop\\certification-manager\\src\\main\\resources\\jsonexemple.json"), Certification.class);
+		Certification certif = mapper.readValue(new File("src/main/resources/jsonexemple.json"), Certification.class);
 		assertEquals("", Integer.valueOf(85), certif.getPercent_success());
 
 	}
@@ -45,67 +45,67 @@ public class TrainerRestControllerTest {
 	public void testverifTitle(){
 		Map<String, String> errors = new HashMap<String, String>();
 		Certification certif = MockCertif.getCertif();
-		assertEquals("title : bla OK", errors.isEmpty(), trainerRestController.validateCertification(certif).isEmpty());
+		assertEquals("title : bla OK", errors.isEmpty(), trainerRestController.validateCertificationMeta(certif).isEmpty());
 		
 		certif.setTitle(null);
 		errors.put("title", null);
-		assertEquals("title : null pasOK", errors.get("title"), trainerRestController.validateCertification(certif).get("title"));
+		assertEquals("title : null pasOK", errors.get("title"), trainerRestController.validateCertificationMeta(certif).get("title"));
 		
 		errors.put("title", "b");
 		certif.setTitle("b");
-		assertEquals("title : b pasOK", errors.get("title"), trainerRestController.validateCertification(certif).get("title"));
+		assertEquals("title : b pasOK", errors.get("title"), trainerRestController.validateCertificationMeta(certif).get("title"));
 	}
 	
 	@Test
 	public void testverifDescription(){
 		Map<String, String> errors = new HashMap<String, String>();
 		Certification certif = MockCertif.getCertif();
-		assertEquals("description : bla OK", errors.isEmpty(), trainerRestController.validateCertification(certif).isEmpty());
+		assertEquals("description : bla OK", errors.isEmpty(), trainerRestController.validateCertificationMeta(certif).isEmpty());
 		certif.setTitle(null);
 		errors.put("description", null);
-		assertEquals("title : null OK", errors.isEmpty(), trainerRestController.validateCertification(certif).isEmpty());
+		assertEquals("title : null OK", errors.isEmpty(), trainerRestController.validateCertificationMeta(certif).isEmpty());
 	}
 	
 	@Test
 	public void testverifPercentSuccess(){
 		Map<String, String> errors = new HashMap<String, String>();
 		Certification certif = MockCertif.getCertif();
-		assertEquals("percentSuccess : 50 OK", errors.isEmpty(), trainerRestController.validateCertification(certif).isEmpty());
+		assertEquals("percentSuccess : 50 OK", errors.isEmpty(), trainerRestController.validateCertificationMeta(certif).isEmpty());
 		
 		certif.setPercent_success(null);
 		errors.put("percentSuccess", null);
-		assertEquals("percent : null pasOK", errors.containsKey("percentSuccess"), trainerRestController.validateCertification(certif).containsKey("percentSuccess"));
+		assertEquals("percent : null pasOK", errors.containsKey("percentSuccess"), trainerRestController.validateCertificationMeta(certif).containsKey("percentSuccess"));
 		
 		
 		certif.setPercent_success(-1);
 		errors.put("percentSuccess", "-1");
-		assertEquals("percent : -1 pasOK", errors.get("percentSuccess"), trainerRestController.validateCertification(certif).get("percentSuccess"));
+		assertEquals("percent : -1 pasOK", errors.get("percentSuccess"), trainerRestController.validateCertificationMeta(certif).get("percentSuccess"));
 		
 		certif.setPercent_success(101);
 		errors.put("percentSuccess", "101");
-		assertEquals("percent : 101 pasOK", errors.get("percentSuccess"), trainerRestController.validateCertification(certif).get("percentSuccess"));
+		assertEquals("percent : 101 pasOK", errors.get("percentSuccess"), trainerRestController.validateCertificationMeta(certif).get("percentSuccess"));
 	}
 	
 	@Test
 	public void testverifNbQuest(){
 		Map<String, String> errors = new HashMap<String, String>();
 		Certification certif = MockCertif.getCertif();
-		assertEquals("nb_quest : 30 OK", errors.isEmpty(), trainerRestController.validateCertification(certif).isEmpty());
+		assertEquals("nb_quest : 30 OK", errors.isEmpty(), trainerRestController.validateCertificationMeta(certif).isEmpty());
 		certif.setNb_question(null);
 		errors.put("nb_quest", null);
-		assertEquals("nb_quest : null pasOK", errors.containsKey("nb_quest"), trainerRestController.validateCertification(certif).containsKey("nb_quest"));
+		assertEquals("nb_quest : null pasOK", errors.containsKey("nb_quest"), trainerRestController.validateCertificationMeta(certif).containsKey("nb_quest"));
 		errors.put("nb_quest", "-1");
 		certif.setNb_question(-1);
-		assertEquals("nb_quest : -1 pasOK", errors.get("nb_quest"), trainerRestController.validateCertification(certif).get("nb_quest"));
+		assertEquals("nb_quest : -1 pasOK", errors.get("nb_quest"), trainerRestController.validateCertificationMeta(certif).get("nb_quest"));
 	}
 	
 	@Test
 	public void testverifDuration(){
 		Map<String, String> errors = new HashMap<String, String>();
 		Certification certif = MockCertif.getCertif();
-		assertEquals("duration : bla OK", errors.isEmpty(), trainerRestController.validateCertification(certif).isEmpty());
+		assertEquals("duration : bla OK", errors.isEmpty(), trainerRestController.validateCertificationMeta(certif).isEmpty());
 		certif.setDuration(null);
 		errors.put("duration", null);
-		assertEquals("duration : null pasOK", errors.containsKey("duration"), trainerRestController.validateCertification(certif).containsKey("duration"));
+		assertEquals("duration : null pasOK", errors.containsKey("duration"), trainerRestController.validateCertificationMeta(certif).containsKey("duration"));
 	}
 }
