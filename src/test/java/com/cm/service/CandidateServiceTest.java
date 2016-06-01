@@ -2,22 +2,17 @@ package com.cm.service;
 
 import static org.junit.Assert.assertEquals;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cm.CertificationManagerApplication;
+import com.cm.MockObject.MockCandidate;
 import com.cm.entity.Candidate;
 import com.cm.exception.CandidateAlreadyExistException;
 
@@ -34,27 +29,7 @@ public class CandidateServiceTest {
 	public final ExpectedException exception = ExpectedException.none();
 	
 	
-	private Candidate getMockCandidate(){
-
-		Candidate candidate = 
-				new Candidate();
-		candidate.setLastname("u");
-		candidate.setFirstname("u");;
-		candidate.setId_card_number("231456789012");
-		candidate.setMail("aze@rty.uiop");
-		candidate.setPwd("Azer7yui");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = null;
-		try {
-			date = sdf.parse("1991-05-07");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		candidate.setBirthdate(date);
-		return candidate;
-		
-	}
+	
 
 	/** 
 	 * get IllegalArgumentException if calling registerCandidate from CandidateService with param null
@@ -69,7 +44,7 @@ public class CandidateServiceTest {
 	 */
 	@Test
 	public void TryToRegisterCandidateWhereIdCardNumberAlreadyExistInDataBase(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 		exception.expect(CandidateAlreadyExistException.class);
 		candidateService.registerCandidate(candidate);
 		candidateService.registerCandidate(candidate);
@@ -80,7 +55,7 @@ public class CandidateServiceTest {
 	 */
 	@Test
 	public void TryToRegisterCandidateWhereMailAlreadyExistInDataBase(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 		
 		exception.expect(CandidateAlreadyExistException.class);
 		candidateService.registerCandidate(candidate);
@@ -92,7 +67,7 @@ public class CandidateServiceTest {
 	
 	@Test
 	public void testCandidateCreate(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 		
 		candidateService.registerCandidate(candidate);
 
@@ -116,7 +91,7 @@ public class CandidateServiceTest {
 	 */
 	@Test
 	public void testFindByMail(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 		candidateService.registerCandidate(candidate);
 		Candidate candidateVerif = candidateService.findByEmail(candidate.getMail());
 		assertEquals("should be " + candidate.getMail(), candidate.getMail(), candidateVerif.getMail());
@@ -138,7 +113,7 @@ public class CandidateServiceTest {
 	 */
 	@Test
 	public void testFindByIdCard(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 
 		candidateService.registerCandidate(candidate);
 		Candidate candidateVerif = candidateService.findByIdCard(candidate.getId_card_number());
@@ -163,7 +138,7 @@ public class CandidateServiceTest {
 	*/
 	@Test
 	public void testFindByValidateCode(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 		String validationCode = candidate.getValidation_code();
 
 		candidateService.registerCandidate(candidate);
@@ -186,7 +161,7 @@ public class CandidateServiceTest {
 	 */
 	@Test
 	public void testUpdateInscriptionValidateOfACandidate(){
-		Candidate candidate = getMockCandidate();
+		Candidate candidate = MockCandidate.getMockCandidate();
 		String validationCode = candidate.getValidation_code();
 
 		candidateService.registerCandidate(candidate);

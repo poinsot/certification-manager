@@ -1,23 +1,16 @@
 package com.cm.service;
 
-import java.util.List;
-import java.util.logging.Logger;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cm.entity.Candidate;
 import com.cm.entity.Trainer;
-import com.cm.exception.CandidateAlreadyExistException;
 import com.cm.exception.TrainerAlreadyExistException;
 import com.cm.repository.TrainerRepository;
 
 @Service
 public class TrainerService {
-	
-	private static final Logger LOGGER = Logger.getLogger(TrainerService.class.getName());
 	
 	@Autowired
 	private TrainerRepository trainerRepository;
@@ -78,9 +71,20 @@ public class TrainerService {
 			trainer.setInscription_validate(1);
 			trainerRepository.save(trainer);
 		}
-		
-		
-		
+	}
+	
+	public Trainer findById(String id){
+		if(id == null){
+			throw new IllegalArgumentException("id is null");
+		}
+		Integer idNumber;
+		try{
+			idNumber = Integer.valueOf(id);
+		}
+		catch(NumberFormatException e){
+			throw new IllegalArgumentException("id not a number");
+		}
+		return trainerRepository.findOne(idNumber);
 		
 	}
 	

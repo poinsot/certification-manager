@@ -1,29 +1,29 @@
 package com.cm.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.cm.entity.Candidate;
-
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cm.entity.Trainer;
 import com.cm.exception.TrainerAlreadyExistException;
+import com.cm.exception.TrainerNotFoundException;
 import com.cm.service.MailSenderService;
 import com.cm.service.TrainerService;
 import com.cm.utils.DateUtils;
@@ -32,27 +32,27 @@ import com.cm.validator.Validator;
 @Controller
 @RequestMapping(path="/trainer")
 public class TrainerController {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(TrainerController.class.getName());
-	
+
 	@Autowired
 	TrainerService trainerService;
-	
+
 	@Autowired
 	MailSenderService mailSender;
-	
-	
+
+
 	/**
 	 * Mapping of trainerRegister web page
 	 * @param model
 	 * @return trainerRegister.jsp
 	 */
-	
+
 	@RequestMapping(path="/register",method={RequestMethod.GET})
 	public String trainerRegisterForm(Model model) {
 		return "trainerRegister";
 	}
-	
+
 	/**
 	 * POST process on register form
 	 * @param trainer : the trainer entity linked to DB
@@ -66,7 +66,7 @@ public class TrainerController {
 	 */
 	@RequestMapping(path="/register",method={RequestMethod.POST})
 	public String processTrainerRegistrationForm(@ModelAttribute("trainer") Trainer trainer, Model model, HttpServletRequest req) {
-		
+
 		String date = req.getParameter("birthday");
 		Map<String, String> errors = new HashMap<String, String>();
 		if(validateFields(trainer,errors,model,date)) {
@@ -85,14 +85,14 @@ public class TrainerController {
 			}
 
 			return "redirect:confirmation";
-			
+
 		}
 
 		model.addAttribute("trainer", trainer);	
 		LOGGER.info(errors.toString());
 		return "trainerRegister";
 	}
-	
+
 	/**
 	 * Mapping of registration confirmation page
 	 * @return candidateRegisterConfirmation.jsp
@@ -102,7 +102,7 @@ public class TrainerController {
 	public String confirmationInscription(){
 		return "trainerRegisterConfirmation";
 	}
-	
+
 	/**
 	 * 
 	 * @param confirmation_code : the confirmation included in the URL (the one sent to the user by mail)
@@ -115,11 +115,11 @@ public class TrainerController {
 	public String confirmationInscriptionDone(@PathVariable String confirmation_code){
 		Trainer trainer = trainerService.findByValidationCode(confirmation_code);
 		if(trainer == null)
-			return "redirect:/error/confirmationcodeinvalide";
+			throw new TrainerNotFoundException();
 		trainerService.updateInscriptionValidateOfACandidate(trainer);
 		return "confirmOK";
 	}
-	
+
 	/**
 	 * 
 	 * @param trainer = The Trainer's entity with values entered in the form
@@ -128,23 +128,22 @@ public class TrainerController {
 	 * @param date = the formated date
 	 * @return boolean (true if fields are correctly mapped, false else) 
 	 */
-	
 	private boolean validateFields(Trainer trainer, Map<String,String> errors,Model model, String date) {
-		
+
 		String lastname = trainer.getLastname();
 		String firstname= trainer.getFirstname();
 		String mail= trainer.getMail();
 		String pwd = trainer.getPwd();
-				
+
 		if(! Validator.validateFirstName(firstname)) {
-			
+
 			errors.putIfAbsent("firstName", "firstName invalid => + " + firstname);			
 		}
-		
+
 		if(! Validator.validateLastName(lastname)) {
 			errors.putIfAbsent("lastName", "lastName invalid => " + lastname);
 		}
-		
+
 		if(! Validator.validatePwd(pwd)) {
 			errors.putIfAbsent("pwd", "pwd invalid => " + pwd);		
 		}
@@ -152,24 +151,73 @@ public class TrainerController {
 			String pw_hash = BCrypt.hashpw(pwd, BCrypt.gensalt()); 
 			trainer.setPwd(pw_hash);	
 		}
-		
+
 		if(! Validator.validateBirthDate(date)) {
 			errors.putIfAbsent("birthDate", "birthDate invalid => " + date);
 		}
 		else{
 			trainer.setBirthdate(DateUtils.dateParser(date,"dd/MM/yyyy"));
 		}
-					
+
 		if(! Validator.validateMail(mail)) {
 			errors.putIfAbsent("mail", "mail invalid => " + mail);
 		}
-		
+
 		/*Trainer checkTrainer = trainerService.findTrainer("glenn.judeau@gmail.com");
 		if (BCrypt.checkpw( "TooCool24",checkTrainer.getPwd()))
 		    LOGGER.info("IT MATCHES !!!!!!!!!!!!!!!!!!");
 		else
 			LOGGER.info("IT  DOESN'T MATCHES !!!!!!!!!!!!!!!!!!");*/
-				
+
 		return(errors.isEmpty());
 	}
+
+	@RequestMapping(path="/login",method={RequestMethod.GET})
+	public String login() {
+		return "trainerLoggin";
+	}
+	
+	@RequestMapping(path="/login",
+					method=RequestMethod.POST, 
+					produces="application/json")
+	public String loginVerif(@ModelAttribute("trainer") Trainer trainer, Model model, HttpServletResponse resp) {
+		Map<String,String> errors = new HashMap<>();
+		Trainer trainerSearch = trainerService.findTrainerByMail(trainer.getMail());
+		if(trainerSearch == null){
+			errors.putIfAbsent("login", trainer.getMail());
+		}
+		if (!BCrypt.checkpw(trainer.getPwd(), trainerSearch.getPwd())){
+			errors.putIfAbsent("pwd", trainer.getPwd());
+		}
+		if(!errors.isEmpty()){
+			return JSONObject.wrap(errors).toString();
+		}
+		Cookie cookie = new Cookie("isLogged", trainer.getMail());
+		cookie.setMaxAge(3600);
+		resp.addCookie(cookie);
+		return String.format("/{%s}",trainerSearch.getId());
+	}
+	
+	@RequestMapping(path="/{id}/createcertif", 
+			method={RequestMethod.GET})
+	public String getCreateCertif(@PathVariable String id, HttpServletRequest req){
+		Trainer trainer = trainerService.findById(id);
+		if(trainer == null){
+			throw new TrainerNotFoundException();
+		}
+		if(trainer.getInscription_validate() == 0)
+			//TODO return autre chose
+			return "redirect:/";
+		//TODO if trainer not register => redirect to trainer/login
+		Cookie[] listCookie = req.getCookies();
+		for (Cookie cookie : listCookie) {
+			LOGGER.info(String.format("cookie name : %s %ncookie value : %s", cookie.getName(), cookie.getValue()));
+			if(cookie.getName().equals("isLogged") && !cookie.getValue().equals(trainer.getMail())){
+				return "redirect:/trainer/login";
+			}
+		}
+		return "createcertification";
+	}
+
+	
 }

@@ -10,10 +10,10 @@ pageEncoding="UTF-8"%>
 </head>
 <body>
     <h2>Trainer Loggin</h2>
- <form action="#" th:action="@{/login}" th:object="${trainer}" method="post">
-            <p>E-mail: <input name="mail" th:field="*{mail}" placeholder="yourname@email.com" ></p>
-            <p>Password: </td><td><input name="pwd" type="password" th:field="*{pwd}"></p>
-            <p><input type="submit" value="Submit" ></p^>
+ <form  method="post">
+            <p>E-mail: <input name="mail" placeholder="yourname@email.com" ></p>
+            <p>Password: <input name="pwd" type="password" ></p>
+            <p><input type="submit" value="Submit" ></p>
     </form>
 
 </body>
