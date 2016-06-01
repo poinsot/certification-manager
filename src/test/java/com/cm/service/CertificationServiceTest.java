@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cm.CertificationManagerApplication;
 import com.cm.MockObject.MockCertif;
+import com.cm.MockObject.MockTrainer;
 import com.cm.entity.Certification;
+import com.cm.entity.Trainer;
 import com.cm.exception.TrainerNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -19,6 +21,9 @@ public class CertificationServiceTest {
 
 	@Autowired
 	CertificationService certificationService;
+	
+	@Autowired
+	TrainerService trainerService;
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testCreateCertifWithCertifNull() {
@@ -69,8 +74,10 @@ public class CertificationServiceTest {
 	
 	@Test
 	public void testCreateCertif(){
+		Trainer trainer = MockTrainer.getTrainerMock();
+		trainerService.registerTrainer(trainer);
 		Certification certification = MockCertif.getCertif();
-		certification.setId_trainer(36);
+		certification.setId_trainer(trainer.getId());
 		certificationService.createCertification(certification);
 	}
 

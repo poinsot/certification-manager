@@ -27,7 +27,7 @@ public class TrainerService {
 		if(trainerRepository.findTrainerByEmailAddress(trainer.getMail()) != null){
 			throw new TrainerAlreadyExistException("Trainer's Email already exist", new Throwable(trainer.getMail()));
 		}
-		trainerRepository.save(trainer);
+		trainer = trainerRepository.save(trainer);
 	}
 	
 	/**
