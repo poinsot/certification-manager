@@ -2,6 +2,7 @@ package com.cm.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cm.entity.Certification;
+import com.cm.entity.Question;
 import com.cm.entity.Trainer;
 import com.cm.service.TrainerService;
 
@@ -32,29 +34,30 @@ public class TrainerRestController {
 	@RequestMapping(value = "/{id}/createcertif" ,
 			method = RequestMethod.POST,
 			produces="application/json")
-	public @ResponseBody String createCertif(@RequestBody Certification certifJSON, @PathVariable String id) {
+	public @ResponseBody String createCertif(@RequestBody Certification certif, @PathVariable String id) {
 		Trainer trainer = trainerService.findById(id);
 		if(trainer == null)
 			//TODO redirect 404 error
 			return "redirect:/";
-		Map<String, String> errors = validateCertification(certifJSON);
+		Map<String, String> errors = validateCertificationMeta(certif);
+		//errors.putAll(validateCertificationQuestion(certif));
 		LOGGER.info(JSONObject.wrap(errors).toString());
 		return JSONObject.wrap(errors).toString();
 	}
 
-	public Map<String,String> validateCertification(Certification certifJSON) {
+	public Map<String,String> validateCertificationMeta(Certification certif) {
 		Map<String, String> errors = new HashMap<String, String>();
-		if(!validateTitle(certifJSON.getTitle())){
-			errors.putIfAbsent("title", certifJSON.getTitle());		
+		if(!validateTitle(certif.getTitle())){
+			errors.putIfAbsent("title", certif.getTitle());		
 		}
-		if(!validatePercentSuccess(certifJSON.getPercent_success())){
-			errors.putIfAbsent("percentSuccess", String.valueOf(certifJSON.getPercent_success()));
+		if(!validatePercentSuccess(certif.getPercent_success())){
+			errors.putIfAbsent("percentSuccess", String.valueOf(certif.getPercent_success()));
 		}
-		if(!validateNbQuest(certifJSON.getNb_question())){
-			errors.putIfAbsent("nb_quest", String.valueOf(certifJSON.getNb_question()));			
+		if(!validateNbQuest(certif.getNb_question())){
+			errors.putIfAbsent("nb_quest", String.valueOf(certif.getNb_question()));			
 		}
-		if(!validateDuration(certifJSON.getDuration())){
-			errors.putIfAbsent("duration", String.valueOf(certifJSON.getDuration()));			
+		if(!validateDuration(certif.getDuration())){
+			errors.putIfAbsent("duration", String.valueOf(certif.getDuration()));			
 		}
 		return errors;
 		
