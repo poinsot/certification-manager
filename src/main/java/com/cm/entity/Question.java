@@ -67,9 +67,9 @@ public class Question {
 	public void setCertification(Certification certification) {
 		this.certification = certification;
 	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	
+	public Integer getId() {
+		return id;
 	}
 	
 	
