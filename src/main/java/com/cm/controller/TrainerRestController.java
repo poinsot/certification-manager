@@ -2,7 +2,6 @@ package com.cm.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
@@ -16,7 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cm.entity.Certification;
 import com.cm.entity.Question;
+import com.cm.entity.Response;
 import com.cm.entity.Trainer;
+import com.cm.exception.TrainerNotFoundException;
+import com.cm.service.CertificationService;
+import com.cm.service.QuestionService;
+import com.cm.service.ResponseService;
 import com.cm.service.TrainerService;
 
 @RestController
@@ -25,6 +29,16 @@ public class TrainerRestController {
 	
 	@Autowired
 	TrainerService trainerService;
+	
+	@Autowired
+	CertificationService certificationService;
+	
+	@Autowired
+	QuestionService questionService;
+	
+	@Autowired
+	ResponseService responseService;
+	
 	
 	private static final Logger LOGGER = Logger.getLogger(TrainerRestController.class.getName());
 
@@ -37,12 +51,25 @@ public class TrainerRestController {
 	public @ResponseBody String createCertif(@RequestBody Certification certif, @PathVariable String id) {
 		Trainer trainer = trainerService.findById(id);
 		if(trainer == null)
-			//TODO redirect 404 error
-			return "redirect:/";
+			throw new TrainerNotFoundException();
 		Map<String, String> errors = validateCertificationMeta(certif);
 		//errors.putAll(validateCertificationQuestion(certif));
 		LOGGER.info(JSONObject.wrap(errors).toString());
-		return JSONObject.wrap(errors).toString();
+		if(errors.isEmpty()){
+			return JSONObject.wrap(errors).toString();
+		}
+		certif.setId_trainer(trainer.getId());
+		certificationService.createCertification(certif);
+		for (Question question : certif.getQuestions()) {
+			question.setId_certif(certif.getId());
+			questionService.createQuestion(question);
+			for (Response response : question.getResponses()) {
+				response.setId_question(question.getId());
+				responseService.createResponse(response);
+			}
+		}
+		
+		return "redirect:/trainer/{"+trainer.getId()+"}";
 	}
 
 	public Map<String,String> validateCertificationMeta(Certification certif) {
