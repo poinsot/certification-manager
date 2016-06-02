@@ -29,6 +29,8 @@ import com.cm.service.TrainerService;
 import com.cm.utils.DateUtils;
 import com.cm.validator.Validator;
 
+
+
 @Controller
 @RequestMapping(path="/trainer")
 public class TrainerController {
@@ -202,18 +204,29 @@ public class TrainerController {
 	
 	@RequestMapping(path="/{id}/home", 
 			method={RequestMethod.GET})
-	public String trainerHome(@PathVariable String id, HttpServletRequest req){
-		switch(isTrainerLogged(id, req)){
+	public String trainerHome(@PathVariable String id, HttpServletRequest req, Model model){
+		
+		Trainer trainer = trainerService.findById(id);
+		if(trainer == null){
+			throw new TrainerNotFoundException();
+		}
+		switch(isTrainerLogged(id, req, trainer)){
 		case "notValidate" : return "redirect:/";
 		case "notLogged" : return "redirect:/trainer/login";
 		}
+	
+		model.addAttribute("trainer", trainer);
 		return "trainerHome";
 	}
 	
 	@RequestMapping(path="/{id}/createcertif", 
 			method={RequestMethod.GET})
 	public String getCreateCertif(@PathVariable String id, HttpServletRequest req){
-		switch(isTrainerLogged(id, req)){
+		Trainer trainer = trainerService.findById(id);
+		if(trainer == null){
+			throw new TrainerNotFoundException();
+		}
+		switch(isTrainerLogged(id, req, trainer)){
 		case "notValidate" : return "redirect:/";
 		case "notLogged" : return "redirect:/trainer/login";
 		}
@@ -222,11 +235,9 @@ public class TrainerController {
 
 	
 	
-	private String isTrainerLogged(String id, HttpServletRequest req) {
-		Trainer trainer = trainerService.findById(id);
-		if(trainer == null){
-			throw new TrainerNotFoundException();
-		}
+	private String isTrainerLogged(String id, HttpServletRequest req, Trainer trainer) {
+		
+		
 		if(trainer.getInscription_validate() == 0)
 			//TODO return autre chose
 			return "notValidate";
