@@ -55,6 +55,8 @@ function isAllWhitespace(content) {
 }
 
 function questionValidator() {
+	console.log("BEGIN questionValidator()");
+	cleanWarningAndErrorMessages();
 	if (isAllWhitespace(getTextQuestionValue())) {
 		console.log("Question is empty.");
 		addErrorMessage("Question is empty.", ".text");
@@ -65,6 +67,7 @@ function questionValidator() {
 		if (isAllWhitespace(document.getElementById("answertext" + id).value)) {
 			console.log("Answer text " + id + " is empty");
 			addErrorMessage("Answers should not be empty.", ".answers");
+			return;
 		}
 	}
 }
@@ -73,9 +76,8 @@ function saveQuestion() {
 	questionJSON = {"text": "",
 			"responses": []
 	};
-	cleanWarningAndErrorMessages();
 	questionValidator();
-	var errors = document.getElementsByClassName('error');
+	errors = document.getElementsByClassName('error');
 	if (errors.length == 0){
 		buildQuestionJSON();
 		console.log(JSON.stringify(questionJSON));
