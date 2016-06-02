@@ -196,7 +196,7 @@ public class TrainerController {
 		cookie.setMaxAge(3600);
 		resp.addCookie(cookie);
 		model.addAttribute("trainer", trainer);	
-		return String.format("redirect:/trainer/{%s}/home",trainerSearch.getId());
+		return String.format("redirect:/trainer/%s/home",trainerSearch.getId());
 	}
 	
 	
