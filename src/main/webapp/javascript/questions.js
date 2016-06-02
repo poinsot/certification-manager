@@ -12,8 +12,24 @@ saveQuestionButton.addEventListener('click', function(e) {
 	saveQuestion();
 });
 
+function getTextQuestionValue() {
+	if (typeof tinyMCE == 'undefined') {
+		return document.getElementById("textQuestion").value;
+	} else {
+		tinyMCE.get("textQuestion").getContent();
+	}
+}
+
+function setTextQuestion(str) {
+	if (typeof tinyMCE == 'undefined') {
+		document.getElementById("textQuestion").value = str;
+	} else {
+		tinyMCE.get("textQuestion").setContent(str);
+	}
+}
+
 function buildQuestionJSON() {
-	questionJSON.text = document.getElementById('textQuestion').value;
+	questionJSON.text = getTextQuestionValue();
 	var answers = document.querySelectorAll('.answer');
 	for(var i = 0; i < answers.length; i++) {
 		answerJSON = {"text": "", "is_correct": ""};
@@ -28,22 +44,18 @@ function buildQuestionJSON() {
 	}
 }
 
-/**
- * Determine whether a node's text content is entirely whitespace.
- *
- * @param nod  A node implementing the |CharacterData| interface (i.e.,
- *             a |Text|, |Comment|, or |CDATASection| node
- * @return     True if all of the text content of |nod| is whitespace,
- *             otherwise false.
- * @author https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace_in_the_DOM
- */
-function isAllWhitespace(text) {
-  // Use ECMA-262 Edition 3 String and RegExp features
-  return !(/[^\t\n\r ]/.test(text));
+function isAllWhitespace(content) {
+	if (typeof tinyMCE != 'undefined') {
+		if (content == getTextQuestionValue()) {
+			content = tinymce.get('textQuestion').getContent({format: 'text'});
+			return content.trim(content) == '';
+		}
+	}
+	return !(/[^\t\n\r ]/.test(content));
 }
 
 function questionValidator() {
-	if (isAllWhitespace(document.getElementById("textQuestion").value)) {
+	if (isAllWhitespace(getTextQuestionValue())) {
 		console.log("Question is empty.");
 		addErrorMessage("Question is empty.", ".text");
 	}
@@ -69,7 +81,7 @@ function saveQuestion() {
 		console.log(JSON.stringify(questionJSON));
 		certificationJSON.questions.push(questionJSON);
 		console.log(JSON.stringify(certificationJSON));
-		document.getElementById("textQuestion").value = "";
+		setTextQuestion("");
 		var answers = document.getElementsByClassName('answers')[0];
 		answers.innerHTML = '<p>Answers:</p><div id="answer1" class="answer"><input name="answertext1" id="answertext1" type="text"> <input name="answeristrue1" id="answeristrue1" type="checkbox"> <a href="" class="removeanswer">Remove</a></div><div id="answer2" class="answer"><input name="answertext2" id="answertext2" type="text"> <inputname="answeristrue2" id="answeristrue2" type="checkbox"> <a href="" class="removeanswer">Remove</a></div>';
 	} else {
