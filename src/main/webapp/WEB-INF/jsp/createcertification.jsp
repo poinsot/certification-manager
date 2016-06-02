@@ -36,16 +36,16 @@
 		</div>
 		<div id="questions" class="questions">
 			<div class="text">
-				<p>Question:</p>
+				<p>New question:</p>
 				<textarea name="text" id="textQuestion"></textarea>
 			</div>
 			<div class="answers">
 				<p>Answers:</p>
-				<div id="answer1" class="answer">
+				<div id="answer1" class="answer"><span class="answernumber"></span> 
 					<input name="answertext1" id="answertext1" type="text"> <input
 						name="answeristrue1" id="answeristrue1" type="checkbox"> <a href="" class="removeanswer">Remove</a>
 				</div>
-				<div id="answer2" class="answer">
+				<div id="answer2" class="answer"><span class="answernumber"></span> 
 					<input name="answertext2" id="answertext2" type="text"> <input
 						name="answeristrue2" id="answeristrue2" type="checkbox"> <a href="" class="removeanswer">Remove</a>
 				</div>
@@ -57,6 +57,7 @@
 	<script src="/javascript/createcertification.js"></script>
 	<script src="/javascript/questions.js"></script>
 	<script src="/javascript/answers.js"></script>
+	<script src="/javascript/listquestions.js"></script>
 	<script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
     <script src="/javascript/tinymce.js"></script>
 </body>
