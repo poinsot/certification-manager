@@ -48,7 +48,7 @@ function validator() {
 		addErrorMessage("Passing score is empty", ".percent_success");
 	}
 	if (document.getElementById('percent_success').value > 100) {
-		addErrorMessage("Passing score should be in 0-10", ".percent_success");
+		addErrorMessage("Passing score should be in 0-100", ".percent_success");
 	}
 	if (document.getElementById('nb_question').value > certificationJSON.questions.length) {
 		addErrorMessage("Please save at least " + document.getElementById('nb_question').value + " questions.", ".nb_question");
