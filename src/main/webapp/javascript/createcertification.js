@@ -6,16 +6,7 @@ var certificationJSON = {
 		"nb_question": "",
 		"duration": "",
 		"description": "",
-		"questions": [
-		              {"text": "Ceci la question 1 ?",
-		            	  "responses": [
-		            	                {"text": "Réponse a", "is_correct": "1"},
-		            	                {"text": "Réponse b", "is_correct": "0"}]
-		              },
-		              {"text": "Ceci la question 2 ?",
-		            	  "responses": [
-		            	                {"text": "Réponse a", "is_correct": "1"},
-		            	                {"text": "Réponse b", "is_correct": "0"}]}]
+		"questions": []
 };
 
 var saveButton = document.querySelector('#save');

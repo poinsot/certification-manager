@@ -57,5 +57,7 @@
 	<script src="/javascript/createcertification.js"></script>
 	<script src="/javascript/questions.js"></script>
 	<script src="/javascript/answers.js"></script>
+	<script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
+    <script src="/javascript/tinymce.js"></script>
 </body>
 </html>

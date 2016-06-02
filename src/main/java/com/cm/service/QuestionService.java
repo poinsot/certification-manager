@@ -39,7 +39,7 @@ public class QuestionService {
 		if(certificationRepository.findOne(question.getId_certif()) == null){
 			throw new CertificationNotFoundException();
 		}
-		questionRepository.save(question);
+		question = questionRepository.save(question);
 		
 	}
 }
