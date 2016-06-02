@@ -16,7 +16,7 @@ function getTextQuestionValue() {
 	if (typeof tinyMCE == 'undefined') {
 		return document.getElementById("textQuestion").value;
 	} else {
-		tinyMCE.get("textQuestion").getContent();
+		return tinyMCE.get("textQuestion").getContent();
 	}
 }
 
