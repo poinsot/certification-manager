@@ -23,13 +23,13 @@ public class ResponseService {
 	QuestionRepository questionRepository;
 
 	@Transactional
-	public void createResponse(Response response) {
+	public Response createResponse(Response response) {
 		if(response == null){
 			throw new IllegalArgumentException("response is null");
 		}
 		
 		if(response.getId_question() == null){
-			throw new IllegalArgumentException("id_question of certification is null");
+			throw new IllegalArgumentException("id_question of response is null");
 		}
 		if(response.getText() == null){
 			throw new IllegalArgumentException("Text of response is null");
@@ -42,7 +42,7 @@ public class ResponseService {
 		if(questionRepository.findOne(response.getId_question()) == null){
 			throw new QuestionNotFoundException();
 		}
-		response = responseRepository.save(response);
+		return responseRepository.save(response);
 	}
 
 }
