@@ -85,14 +85,15 @@ function saveQuestion() {
 		console.log(JSON.stringify(certificationJSON));
 		setTextQuestion("");
 		var answers = document.getElementsByClassName('answers')[0];
-		answers.innerHTML = '<div id="answer1" class="answer">';
+		answers.innerHTML = '<div id="answer1" class="answer"><span class="answernumber"></span>  ';
 		answers.innerHTML += '<input name="answertext1" id="answertext1" type="text"> ';
 		answers.innerHTML += '<input name="answeristrue1" id="answeristrue1" type="checkbox"> ';
 		answers.innerHTML += '<a href="" class="removeanswer">Remove</a></div>';
-		answers.innerHTML += '<div id="answer2" class="answer">';
+		answers.innerHTML += '<div id="answer2" class="answer"><span class="answernumber"></span>  ';
 		answers.innerHTML += '<input name="answertext2" id="answertext2" type="text"> ';
 		answers.innerHTML += '<input name="answeristrue2" id="answeristrue2" type="checkbox"> ';
 		answers.innerHTML += '<a href="" class="removeanswer">Remove</a></div>';
+		printAllQuestions();
 	} else {
 		console.log("Error: question or answers");
 	}
