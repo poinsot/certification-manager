@@ -75,6 +75,13 @@ public class Response {
 	public Integer getId() {
 		return id;
 	}
+
+	@Override
+	public String toString() {
+		return "Response [text=" + text + ", id_question=" + id_question + ", is_correct=" + is_correct + "]";
+	}
+	
+	
 	
 	
 }

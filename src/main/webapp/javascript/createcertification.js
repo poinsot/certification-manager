@@ -1,4 +1,5 @@
 const URL = '';
+var errors;
 
 var certificationJSON = {
 		"title": "",
@@ -29,16 +30,14 @@ function addWarningMessage(msg) {
 }
 
 function cleanWarningAndErrorMessages() {
-	var errors = document.getElementsByClassName('error');
-	for (var i = 0; i < errors.length; i++) {
-	    if (errors[i].className.toLowerCase() == "error") {
-	        errors[i].parentNode.removeChild(errors[i]);
-	    }
+	errors = document.getElementsByClassName('error');
+	for (var i = errors.length; i--;) {
+		errors[i].remove();
 	}
 	document.querySelector('.warning').innerHTML = "";
 }
 
-function validator(){
+function validator() {
 	if (document.getElementById('title').value.length < 3) {
 		addErrorMessage("Title of certification must be at least 3 characters", ".title");
 	}
@@ -47,6 +46,12 @@ function validator(){
 	}
 	if (document.getElementById('percent_success').value == "") {
 		addErrorMessage("Passing score is empty", ".percent_success");
+	}
+	if (document.getElementById('percent_success').value > 100) {
+		addErrorMessage("Passing score should be in 0-100", ".percent_success");
+	}
+	if (document.getElementById('nb_question').value > certificationJSON.questions.length) {
+		addErrorMessage("Please save at least " + document.getElementById('nb_question').value + " questions.", ".nb_question");
 	}
 }
 
@@ -66,6 +71,7 @@ function buildCertificationJSON() {
 
 function saveOnServer() {
 	buildCertificationJSON();
+	console.log(JSON.stringify(certificationJSON));
 	var xmlhttp = new XMLHttpRequest();
 	var errors = document.getElementsByClassName('error');
 	console.log("" + errors.length);

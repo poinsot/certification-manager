@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css" />
 </head>
 <body>
-	<h1>Create new certification</h1>
+	<h1>Add File to Upload (Test)</h1>
 	<div class="warning"></div>
 	<form action="createcertification">
 		<div class="title">
@@ -36,33 +36,17 @@
 		</div>
 		<div id="questions" class="questions">
 			<div class="text">
-				<p>New question:</p>
+				<p>Question:</p>
 				<input type="file" name="file" id="file"/>
 				<a href="" id="uploadFileAction"> Upload Selected File</a>
-				<textarea name="text" id="textQuestion"></textarea>
+
 			</div>
-			<div class="answers">
-				<p>Answers:</p>
-				<div id="answer1" class="answer"><span class="answernumber"></span> 
-					<input name="answertext1" id="answertext1" type="text"> <input
-						name="answeristrue1" id="answeristrue1" type="checkbox"> <a href="" class="removeanswer">Remove</a>
-				</div>
-				<div id="answer2" class="answer"><span class="answernumber"></span> 
-					<input name="answertext2" id="answertext2" type="text"> <input
-						name="answeristrue2" id="answeristrue2" type="checkbox"> <a href="" class="removeanswer">Remove</a>
-				</div>
-			</div>
-			<a href="" id="addanswer">Add answer</a>
-			<a href="" id="savequestion">Save question</a>
 		</div>
 	</form>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script src="/javascript/createcertification.js"></script>
-	<script src="/javascript/questions.js"></script>
-	<script src="/javascript/answers.js"></script>
-	<script src="/javascript/listquestions.js"></script>
 	<script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
     <script src="/javascript/tinymce.js"></script>
     <script src="/javascript/upload.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </body>
 </html>

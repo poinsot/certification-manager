@@ -1,5 +1,7 @@
 package com.cm.service;
 
+import java.util.logging.Logger;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.stereotype.Service;
 
 import com.cm.CertificationManagerApplication;
+import com.cm.controller.TrainerRestController;
 import com.cm.entity.Certification;
 import com.cm.exception.TrainerNotFoundException;
 import com.cm.repository.CertificationRepository;
@@ -16,6 +19,8 @@ import com.cm.repository.TrainerRepository;
 @SpringApplicationConfiguration(classes=CertificationManagerApplication.class)
 public class CertificationService {
 	
+	private static final Logger LOGGER = Logger.getLogger(CertificationService.class.getName());
+
 	@Autowired
 	CertificationRepository certificationRepository;
 	
@@ -23,10 +28,11 @@ public class CertificationService {
 	TrainerRepository trainerRepository;
 
 	@Transactional
-	public void createCertification(Certification certification) {
+	public Certification createCertification(Certification certification) {
 		if(certification == null){
 			throw new IllegalArgumentException("certification is null");
 		}
+		LOGGER.info(certification.toString());
 		
 		if(certification.getId_trainer() == null){
 			throw new IllegalArgumentException("id_trainer of certification is null");
@@ -47,7 +53,7 @@ public class CertificationService {
 		if(trainerRepository.findOne(certification.getId_trainer()) == null){
 			throw new TrainerNotFoundException();
 		}
-		certification = certificationRepository.save(certification);
+		return certificationRepository.save(certification);
 	}
 	
 	@Transactional

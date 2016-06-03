@@ -46,15 +46,20 @@ function buildQuestionJSON() {
 
 function isAllWhitespace(content) {
 	if (typeof tinyMCE != 'undefined') {
-		if (content == getTextQuestionValue()) {
-			content = tinymce.get('textQuestion').getContent({format: 'text'});
+		console.log("Test Question in progress")
+			content = tinymce.get('textQuestion').getContent();
 			return content.trim(content) == '';
-		}
 	}
 	return !(/[^\t\n\r ]/.test(content));
 }
 
+function isAnswerAllWhitespace(content) {
+	return !(/[^\t\n\r ]/.test(content));
+}
+
 function questionValidator() {
+	console.log("BEGIN questionValidator()");
+	cleanWarningAndErrorMessages();
 	if (isAllWhitespace(getTextQuestionValue())) {
 		console.log("Question is empty.");
 		addErrorMessage("Question is empty.", ".text");
@@ -62,9 +67,10 @@ function questionValidator() {
 	var answers = document.querySelectorAll('.answer');
 	for(var i = 0; i < answers.length; i++) {
 		var id = answers[i].id.substring(6);
-		if (isAllWhitespace(document.getElementById("answertext" + id).value)) {
+		if (isAnswerAllWhitespace(document.getElementById("answertext" + id).value)) {
 			console.log("Answer text " + id + " is empty");
 			addErrorMessage("Answers should not be empty.", ".answers");
+			return;
 		}
 	}
 }
@@ -73,9 +79,8 @@ function saveQuestion() {
 	questionJSON = {"text": "",
 			"responses": []
 	};
-	cleanWarningAndErrorMessages();
 	questionValidator();
-	var errors = document.getElementsByClassName('error');
+	errors = document.getElementsByClassName('error');
 	if (errors.length == 0){
 		buildQuestionJSON();
 		console.log(JSON.stringify(questionJSON));
@@ -83,14 +88,15 @@ function saveQuestion() {
 		console.log(JSON.stringify(certificationJSON));
 		setTextQuestion("");
 		var answers = document.getElementsByClassName('answers')[0];
-		answers.innerHTML = '<div id="answer1" class="answer">';
+		answers.innerHTML = '<div id="answer1" class="answer"><span class="answernumber"></span>  ';
 		answers.innerHTML += '<input name="answertext1" id="answertext1" type="text"> ';
 		answers.innerHTML += '<input name="answeristrue1" id="answeristrue1" type="checkbox"> ';
 		answers.innerHTML += '<a href="" class="removeanswer">Remove</a></div>';
-		answers.innerHTML += '<div id="answer2" class="answer">';
+		answers.innerHTML += '<div id="answer2" class="answer"><span class="answernumber"></span>  ';
 		answers.innerHTML += '<input name="answertext2" id="answertext2" type="text"> ';
 		answers.innerHTML += '<input name="answeristrue2" id="answeristrue2" type="checkbox"> ';
 		answers.innerHTML += '<a href="" class="removeanswer">Remove</a></div>';
+		printAllQuestions();
 	} else {
 		console.log("Error: question or answers");
 	}

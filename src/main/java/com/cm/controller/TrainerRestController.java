@@ -1,8 +1,11 @@
 package com.cm.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,28 +51,55 @@ public class TrainerRestController {
 	@RequestMapping(value = "/{id}/createcertif" ,
 			method = RequestMethod.POST,
 			produces="application/json")
-	public @ResponseBody String createCertif(@RequestBody Certification certif, @PathVariable String id) {
+	public @ResponseBody String createCertif(@RequestBody Certification certif, @PathVariable String id, HttpServletResponse resp) throws IOException {
 		Trainer trainer = trainerService.findById(id);
 		if(trainer == null)
 			throw new TrainerNotFoundException();
 		Map<String, String> errors = validateCertificationMeta(certif);
-		//errors.putAll(validateCertificationQuestion(certif));
-		LOGGER.info(JSONObject.wrap(errors).toString());
 		if(errors.isEmpty()){
+			certif.setId_trainer(trainer.getId());
+			certif = certificationService.createCertification(certif);
+		}
+		errors.putAll(validateCertificationQuestion(certif));
+		LOGGER.info(JSONObject.wrap(errors).toString());
+		if(!errors.isEmpty()){
 			return JSONObject.wrap(errors).toString();
 		}
-		certif.setId_trainer(trainer.getId());
-		certificationService.createCertification(certif);
+		LOGGER.info(certif.toString());
+		
 		for (Question question : certif.getQuestions()) {
 			question.setId_certif(certif.getId());
-			questionService.createQuestion(question);
+			LOGGER.info(question.toString());
+			question = questionService.createQuestion(question);
 			for (Response response : question.getResponses()) {
 				response.setId_question(question.getId());
+				LOGGER.info(response.toString());
 				responseService.createResponse(response);
 			}
 		}
+		LOGGER.info("ok");
+		resp.sendRedirect("/trainer/"+trainer.getId()+"/home");
+		return "";
+	}
+
+	private Map<String, String> validateCertificationQuestion(Certification certif) {
+		Map<String, String> errors = new HashMap<String, String>();
+		for (Question question : certif.getQuestions()) {
+			if(!validateText(question.getText())){
+				errors.putIfAbsent("question Text", question.getText());		
+			}
+			for (Response response : question.getResponses()) {
+				if(!validateText(response.getText())){
+					errors.putIfAbsent("response Text", response.getText());		
+				}
+			}
+		}
 		
-		return "redirect:/trainer/{"+trainer.getId()+"}";
+		return errors;
+	}
+
+	private boolean validateText(String text) {
+		return text != null;
 	}
 
 	public Map<String,String> validateCertificationMeta(Certification certif) {

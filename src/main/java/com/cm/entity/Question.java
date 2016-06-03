@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="question")
 public class Question {
 
+	
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -72,7 +73,11 @@ public class Question {
 		return id;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Question [text=" + text + ", responses=" + responses + ", id_certif=" + id_certif + "]";
+	}
+
 	
 	
 	

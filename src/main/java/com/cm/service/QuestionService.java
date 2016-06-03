@@ -24,22 +24,22 @@ public class QuestionService {
 
 
 	@Transactional
-	public void createQuestion(Question question) {
+	public Question createQuestion(Question question) {
 		if(question == null){
 			throw new IllegalArgumentException("question is null");
 		}
 		
 		if(question.getId_certif() == null){
-			throw new IllegalArgumentException("id_trainer of certification is null");
+			throw new IllegalArgumentException("id_certif of question is null");
 		}
 		if(question.getText() == null){
-			throw new IllegalArgumentException("Title of certification is null");
+			throw new IllegalArgumentException("Text of question is null");
 		}
 		
 		if(certificationRepository.findOne(question.getId_certif()) == null){
 			throw new CertificationNotFoundException();
 		}
-		question = questionRepository.save(question);
+		return questionRepository.save(question);
 		
 	}
 }
