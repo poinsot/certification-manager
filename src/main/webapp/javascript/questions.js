@@ -46,11 +46,14 @@ function buildQuestionJSON() {
 
 function isAllWhitespace(content) {
 	if (typeof tinyMCE != 'undefined') {
-		if (content == getTextQuestionValue()) {
-			content = tinymce.get('textQuestion').getContent({format: 'text'});
+		console.log("Test Question in progress")
+			content = tinymce.get('textQuestion').getContent();
 			return content.trim(content) == '';
-		}
 	}
+	return !(/[^\t\n\r ]/.test(content));
+}
+
+function isAnswerAllWhitespace(content) {
 	return !(/[^\t\n\r ]/.test(content));
 }
 
@@ -64,7 +67,7 @@ function questionValidator() {
 	var answers = document.querySelectorAll('.answer');
 	for(var i = 0; i < answers.length; i++) {
 		var id = answers[i].id.substring(6);
-		if (isAllWhitespace(document.getElementById("answertext" + id).value)) {
+		if (isAnswerAllWhitespace(document.getElementById("answertext" + id).value)) {
 			console.log("Answer text " + id + " is empty");
 			addErrorMessage("Answers should not be empty.", ".answers");
 			return;
