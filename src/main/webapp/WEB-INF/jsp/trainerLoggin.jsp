@@ -7,14 +7,21 @@ pageEncoding="UTF-8"%>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Trainer Loggin</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
 </head>
 <body>
     <h2>Trainer Loggin</h2>
- <form  method="post">
-            <p>E-mail: <input name="mail" placeholder="yourname@email.com" ></p>
-            <p>Password: <input name="pwd" type="password" ></p>
-            <p><input type="submit" value="Submit" ></p>
+    <div class="warning"></div>
+ <form  method="post" onsubmit="return checkform();">
+ 
+       <table>
+            <tr><td>E-mail: </td><td class="mail"><input id="mail" name="mail" th:field="*{mail}" placeholder="yourname@email.com" ></td></tr>
+            <tr><td>Password: </td><td class="pwd"><input id="pwd" name="pwd" type="password" th:field="*{pwd}"></td></tr>
+            <tr><td><input name="submit" type="submit" value="Submit" ></td></tr>
+        
+            	
+        </table>
     </form>
-
+<script src="/javascript/trainerloggin.js"></script>
 </body>
 </html>
