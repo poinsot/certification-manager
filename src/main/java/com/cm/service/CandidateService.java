@@ -105,5 +105,20 @@ public class CandidateService {
 		candidateRepository.updateInscriptionValidateOfACandidate(Integer.valueOf(1), activation_code);
 		
 	}
+	
+	public Candidate findById(String id){
+		if(id == null){
+			throw new IllegalArgumentException("id is null");
+		}
+		Integer idNumber;
+		try{
+			idNumber = Integer.valueOf(id);
+		}
+		catch(NumberFormatException e){
+			throw new IllegalArgumentException("id not a number");
+		}
+		return candidateRepository.findOne(idNumber);
+		
+	}
 
 }

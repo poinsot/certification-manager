@@ -4,15 +4,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cm.entity.Candidate;
 import com.cm.exception.CandidateAlreadyExistException;
+import com.cm.exception.CandidateNotFoundException;
 import com.cm.service.CandidateService;
+import com.cm.service.CertificationService;
 import com.cm.service.MailSenderService;
 import com.cm.validator.Validator;
 
@@ -36,7 +39,9 @@ public class CandidateController {
 	CandidateService candidateService;
 	@Autowired
 	MailSenderService mailSender;
-
+	@Autowired
+	CertificationService certificationService;
+	
 	/**
 	 * mapping to the jsp candidateRegister
 	 * @return candidateRegister.jsp
@@ -145,7 +150,7 @@ public class CandidateController {
 	public String confirmationInscription(){
 		return "candidateRegisterConfirmation";
 	}
-	
+
 	@RequestMapping(path="/confirm/{confirmation_code}", 
 			method={RequestMethod.GET})
 	public String confirmationInscriptionDone(@PathVariable String confirmation_code){
@@ -155,6 +160,62 @@ public class CandidateController {
 		candidateService.updateInscriptionValidateOfACandidate(candidate.getValidation_code());
 		candidate = candidateService.findByValidationCode(confirmation_code);
 		return "confirmOK";
-		}
+	}
 
+	@RequestMapping(path="/login",method={RequestMethod.GET})
+	public String login() {
+		return "candidateLoggin";
+	}
+	
+	@RequestMapping(path="/login",
+			method=RequestMethod.POST)
+	public String loginVerif(@ModelAttribute("candidate") Candidate candidate, Model model, HttpServletResponse resp) {
+		Map<String,String> errors = new HashMap<>();
+		
+		LOGGER.info(candidate.getMail());
+		Candidate candidateSearch = candidateService.findByEmail(candidate.getMail());
+		if(candidateSearch == null){
+			throw new CandidateNotFoundException();
+		}
+		if (!BCrypt.checkpw(candidate.getPwd(), candidateSearch.getPwd())){
+			errors.putIfAbsent("pwd", candidate.getPwd());
+		}
+		if(!errors.isEmpty()){
+			return JSONObject.wrap(errors).toString();
+		}
+		Cookie cookie = new Cookie("CandidateLogged", candidate.getMail());
+		cookie.setMaxAge(3600);
+		resp.addCookie(cookie);
+		model.addAttribute("candidate", candidate);	
+		return String.format("redirect:/candidate/%s/home",candidateSearch.getId());
+	}
+	
+	@RequestMapping(path="/{id}/home",
+			method=RequestMethod.GET)
+	public String candidateHome(@PathVariable String id, Model model, HttpServletResponse resp,  HttpServletRequest req) {
+		Candidate candidate = candidateService.findById(id);
+		if(candidate == null){
+			throw new CandidateNotFoundException();
+		}
+		switch(isCandidateLogged(id, req, candidate)){
+		case "notValidate" : return "redirect:/";
+		case "notLogged" : return "redirect:/candidate/login";
+		}
+		candidate.setListCertif(certificationService.findAllCertifications());
+		model.addAttribute("candidate", candidate);
+		return "candidateHome";
+	}
+	
+	private String isCandidateLogged(String id, HttpServletRequest req, Candidate candidate) {
+		if(candidate.getInscription_validate() == 0)
+			return "notValidate";
+		Cookie[] listCookie = req.getCookies();
+		for (Cookie cookie : listCookie) {
+			if(cookie.getName().equals("CandidateLogged") && !cookie.getValue().equals(candidate.getMail())){
+				return "notLogged";
+			}
+		}
+		return "";
+	}
+	
 }

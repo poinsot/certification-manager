@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cm.CertificationManagerApplication;
 import com.cm.MockObject.MockCandidate;
+import com.cm.MockObject.MockTrainer;
 import com.cm.entity.Candidate;
+import com.cm.entity.Trainer;
 import com.cm.exception.CandidateAlreadyExistException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -171,4 +173,26 @@ public class CandidateServiceTest {
 		assertEquals("inscription_validate should be 1", Integer.valueOf(1), candidateVerif.getInscription_validate());
 	}
 
+	/**
+	 * get IllegalArgumentException if calling findById from TrainerService with param null
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void findIdWithParamNull(){
+		candidateService.findById(null);
+	}
+	
+	/**
+	 * test find a Trainer by his id
+	 */
+	@Test
+	public void testFindById(){
+		Candidate candidate = MockCandidate.getMockCandidate();
+		
+		candidateService.registerCandidate(candidate);
+		Candidate testCandidate = candidateService.findById(String.valueOf(candidate.getId()));
+		assertEquals("should be aze@rty.uiop", candidate.getMail(), testCandidate.getMail());
+		assertEquals("should be " + candidate.getId(), candidate.getId(), testCandidate.getId());
+		
+		
+	}
 }
