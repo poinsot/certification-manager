@@ -1,5 +1,6 @@
 package com.cm.service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.transaction.Transactional;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.stereotype.Service;
 
 import com.cm.CertificationManagerApplication;
-import com.cm.controller.TrainerRestController;
 import com.cm.entity.Certification;
 import com.cm.exception.TrainerNotFoundException;
 import com.cm.repository.CertificationRepository;
@@ -64,5 +64,10 @@ public class CertificationService {
 		Integer idNumber;
 		idNumber = Integer.valueOf(id);
 		return certificationRepository.findOne(idNumber);
+	}
+	
+	@Transactional
+	public List<Certification> findAllCertifications(){
+		return certificationRepository.findAll();
 	}
 }

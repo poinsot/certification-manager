@@ -1,5 +1,9 @@
 package com.cm.service;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +71,30 @@ public class QuestionServiceTest {
 		
 		questionService.createQuestion(question);
 	}
-
+	
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testFindNumberOfQuestionForTakingACertificationWithIdCertifNullNbQuestNull(){
+		questionService.findAllQuestionForACertification(null);
+	}
+	
+	@Test(expected=CertificationNotFoundException.class)
+	public void testFindNumberOfQuestionForTakingACertificationWithNbQuestNull(){
+		questionService.findAllQuestionForACertification(-1);
+	}
+	
+	
+	@Test
+	public void testGetAllQuestion(){
+		Trainer trainer = MockTrainer.getTrainerMock();
+		trainer = trainerService.registerTrainer(trainer);
+		Certification certif = MockCertif.getCertif();
+		certif.setId_trainer(trainer.getId());
+		certif = certificationService.createCertification(certif);
+		List<Question> list = questionService.findAllQuestionForACertification(certif.getId());
+		for (Question question : list) {
+			assertTrue("should have", certif.getQuestions().contains(question));
+		}
+	}
+	
 }
