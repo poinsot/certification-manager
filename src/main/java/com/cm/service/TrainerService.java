@@ -18,16 +18,17 @@ public class TrainerService {
 	/**
 	 * @param candidate : trainer entity to register in database
 	 * This function persist a new trainer in database, it requires @Transactional as we write in DB
+	 * @return 
 	 */
 	@Transactional
-	public void registerTrainer(Trainer trainer){
+	public Trainer registerTrainer(Trainer trainer){
 		if(trainer == null){
 			throw new IllegalArgumentException("trainer is null");
 		}
 		if(trainerRepository.findTrainerByEmailAddress(trainer.getMail()) != null){
 			throw new TrainerAlreadyExistException("Trainer's Email already exist", new Throwable(trainer.getMail()));
 		}
-		trainer = trainerRepository.save(trainer);
+		return trainerRepository.save(trainer);
 	}
 	
 	/**

@@ -186,7 +186,7 @@ public class TrainerController {
 		Map<String,String> errors = new HashMap<>();
 		Trainer trainerSearch = trainerService.findTrainerByMail(trainer.getMail());
 		if(trainerSearch == null){
-			errors.putIfAbsent("login", trainer.getMail());
+			throw new TrainerNotFoundException();
 		}
 		if (!BCrypt.checkpw(trainer.getPwd(), trainerSearch.getPwd())){
 			errors.putIfAbsent("pwd", trainer.getPwd());
@@ -234,10 +234,7 @@ public class TrainerController {
 	}
 
 	
-	
 	private String isTrainerLogged(String id, HttpServletRequest req, Trainer trainer) {
-		
-		
 		if(trainer.getInscription_validate() == 0)
 			//TODO return autre chose
 			return "notValidate";

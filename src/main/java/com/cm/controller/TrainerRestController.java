@@ -77,7 +77,6 @@ public class TrainerRestController {
 				responseService.createResponse(response);
 			}
 		}
-		LOGGER.info("ok");
 		resp.sendRedirect("/trainer/"+trainer.getId()+"/home");
 		return "";
 	}

@@ -23,7 +23,6 @@ public class MockCandidate {
 		try {
 			date = sdf.parse("1991-05-07");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		candidate.setBirthdate(date);
