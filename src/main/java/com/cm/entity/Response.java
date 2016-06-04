@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="responses")
 public class Response {
@@ -22,6 +24,7 @@ public class Response {
 	@Column(name="text")
 	private String text;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_question", insertable=false, updatable=false)
 	private Question question;

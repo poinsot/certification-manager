@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="question")
 public class Question {
@@ -26,13 +28,13 @@ public class Question {
 	@Column(name="text")
 	private String text;
 	
-	@OneToMany(mappedBy="question")
-	private Set<Response> responses;
-	
 	@NotNull
 	@Column(name="id_certif")
 	private Integer id_certif;
 	
+	@OneToMany(mappedBy="question")
+	private Set<Response> responses;
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id_certif", insertable=false, updatable=false)
 	private Certification certification;

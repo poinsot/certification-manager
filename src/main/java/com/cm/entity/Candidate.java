@@ -1,6 +1,7 @@
 package com.cm.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -66,6 +68,11 @@ public class Candidate {
 	@Column(name="validation_code")
 	private String validation_code = RandomCodeGenerator.generateCode(LENGHT_CODE_ACTIVATION);
 
+	
+	@Transient
+	private List<Certification> listCertif;
+	
+	
 	public String getLastname() {
 		return lastname;
 	}
@@ -129,6 +136,18 @@ public class Candidate {
 	public String getValidation_code() {
 		return validation_code;
 	}
+	
+	
+
+	public List<Certification> getListCertif() {
+		return listCertif;
+	}
+
+	public void setListCertif(List<Certification> listCertif) {
+		this.listCertif = listCertif;
+	}
+	
+	
 
 	@Override
 	public String toString() {

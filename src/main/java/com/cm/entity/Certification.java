@@ -1,6 +1,6 @@
 package com.cm.entity;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +53,7 @@ public class Certification {
 	
 	@Transient
 	@OneToMany(mappedBy="certification")
-	private Set<Question> questions;
+	private List<Question> questions;
 	
 	
 	public Integer getPercent_success() {
@@ -80,11 +80,11 @@ public class Certification {
 
 	
 
-	public Set<Question> getQuestions() {
+	public List<Question> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(Set<Question> questions) {
+	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
 
