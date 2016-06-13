@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,13 +56,17 @@ public class CertificationRestController {
 	        randomQuestions.add(copy.remove(rand.nextInt(copy.size())));
 	    }
 	    Certification certif = new Certification();
+	    certif.setId(certification.getId());
 	    certif.setQuestions(randomQuestions);
 	    certif.setDuration(certification.getDuration());
+	    certif.setPercent_success(certification.getPercent_success());
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.setSerializationInclusion(Include.NON_NULL);
 	    String jsonInString = mapper.writeValueAsString(certif);
 	    LOGGER.info(jsonInString);
 	    return jsonInString;
 	}
+	
+	
 
 }
