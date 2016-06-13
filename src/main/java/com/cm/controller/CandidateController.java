@@ -183,6 +183,7 @@ public class CandidateController {
 		if(!errors.isEmpty()){
 			return JSONObject.wrap(errors).toString();
 		}
+		//TODO make session instead of cookie
 		Cookie cookie = new Cookie("CandidateLogged", candidate.getMail());
 		cookie.setMaxAge(3600);
 		resp.addCookie(cookie);
@@ -212,7 +213,7 @@ public class CandidateController {
 		Cookie[] listCookie = req.getCookies();
 		boolean cookieIsPres = false;
 		for (Cookie cookie : listCookie) {
-			if(cookie.getName().equals("isLogged")){
+			if(cookie.getName().equals("CandidateLogged")){
 				cookieIsPres = true;
 				if(!cookie.getValue().equals(candidate.getMail())){
 					return "notLogged";

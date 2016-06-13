@@ -6,7 +6,7 @@ pageEncoding="UTF-8"%>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Trainer Loggin</title>
+    <title>Candidate Loggin</title>
 </head>
 <body>
     <h2>Candidate Loggin</h2>

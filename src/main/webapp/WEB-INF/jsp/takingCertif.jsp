@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
 
 </head>
-<body onload="changeColor();">
+<body>
 	<div id="quest">
 	</div>
     <div id="my_box">
@@ -20,10 +20,10 @@
 	<a href="" id="next">Next</a>
 
 	<a href="" id="save">Save</a>
-    <script src="/javascript/takingCertif.js"></script>
     <div id = "timer">
     <p></p>
     </div>
-
+<script src="/javascript/takingCertif.js"></script>
+    
 </body>
 </html>
