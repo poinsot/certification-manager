@@ -44,5 +44,14 @@ public class ResponseService {
 		}
 		return responseRepository.save(response);
 	}
+	
+	@Transactional
+	public Response findOne(Integer id) {
+		if(id == null){
+			throw new IllegalArgumentException("id is null");
+		}
+		return responseRepository.findOne(id);
+	}
+	
 
 }

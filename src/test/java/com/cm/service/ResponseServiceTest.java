@@ -1,5 +1,8 @@
 package com.cm.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +89,37 @@ public class ResponseServiceTest {
 		
 		Response response = MockResponse.getResponseMock();
 		response.setId_question(question.getId());
+		assertEquals("id not yet initilized", null, response.getId());
+		response = responseService.createResponse(response);
+		assertNotEquals("id initilized", null, response.getId());
+		
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testFindOneWithIdNull(){
+		responseService.findOne(null);
+	}
+	
+	@Test
+	public void testFindOne(){
+		Trainer trainer = MockTrainer.getTrainerMock();
+		trainerService.registerTrainer(trainer);
+		Trainer trainerSearch = trainerService.findTrainerByMail(trainer.getMail());
+		
+		Certification certification = MockCertif.getCertif();
+		certification.setId_trainer(trainerSearch.getId());
+		certificationService.createCertification(certification);
+		
+		Question question = MockQuestion.getQuestionMock();
+		question.setId_certif(certification.getId());
+		questionService.createQuestion(question);
+		
+		Response response = MockResponse.getResponseMock();
+		response.setId_question(question.getId());
 		responseService.createResponse(response);
 		
+		Response responseCheck = responseService.findOne(response.getId());
+		assertEquals("ids should be equals", response.getId(), responseCheck.getId());
 	}
 
 }
