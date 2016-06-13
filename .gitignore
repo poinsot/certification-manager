@@ -20,4 +20,4 @@ target/
 src/main/resources/gmail.properties
 
 #ideas folder
-.ideas/
+.idea/
