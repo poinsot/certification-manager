@@ -210,10 +210,17 @@ public class CandidateController {
 		if(candidate.getInscription_validate() == 0)
 			return "notValidate";
 		Cookie[] listCookie = req.getCookies();
+		boolean cookieIsPres = false;
 		for (Cookie cookie : listCookie) {
-			if(cookie.getName().equals("CandidateLogged") && !cookie.getValue().equals(candidate.getMail())){
-				return "notLogged";
+			if(cookie.getName().equals("isLogged")){
+				cookieIsPres = true;
+				if(!cookie.getValue().equals(candidate.getMail())){
+					return "notLogged";
+				}
 			}
+		}
+		if(!cookieIsPres){
+			return "notLogged";
 		}
 		return "";
 	}

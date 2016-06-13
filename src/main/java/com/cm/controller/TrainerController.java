@@ -205,14 +205,13 @@ public class TrainerController {
 	@RequestMapping(path="/{id}/home", 
 			method={RequestMethod.GET})
 	public String trainerHome(@PathVariable String id, HttpServletRequest req, Model model){
-		
 		Trainer trainer = trainerService.findById(id);
 		if(trainer == null){
 			throw new TrainerNotFoundException();
 		}
 		switch(isTrainerLogged(id, req, trainer)){
-		case "notValidate" : return "redirect:/";
-		case "notLogged" : return "redirect:/trainer/login";
+		case "notValidate" : LOGGER.info("trainerHome : notValidate"); return "redirect:/";
+		case "notLogged" : LOGGER.info("trainerHome : notLogged"); return "redirect:/trainer/login";
 		}
 	
 		model.addAttribute("trainer", trainer);
@@ -227,9 +226,10 @@ public class TrainerController {
 			throw new TrainerNotFoundException();
 		}
 		switch(isTrainerLogged(id, req, trainer)){
-		case "notValidate" : return "redirect:/";
-		case "notLogged" : return "redirect:/trainer/login";
+		case "notValidate" : LOGGER.info("getCreateCertif : notValidate"); return "redirect:/";
+		case "notLogged" : LOGGER.info("getCreateCertif : notLogged"); return "redirect:/trainer/login";
 		}
+		LOGGER.info("getCreateCertif : ok");
 		return "createcertification";
 	}
 
@@ -240,14 +240,19 @@ public class TrainerController {
 			return "notValidate";
 		//TODO if trainer not register => redirect to trainer/login
 		Cookie[] listCookie = req.getCookies();
+		boolean cookieIsPres = false;
 		for (Cookie cookie : listCookie) {
-			//LOGGER.info(String.format("cookie name : %s %ncookie value : %s", cookie.getName(), cookie.getValue()));
-			if(cookie.getName().equals("isLogged") && !cookie.getValue().equals(trainer.getMail())){
-				return "notLogged";
+			if(cookie.getName().equals("isLogged")){
+				cookieIsPres = true;
+				if(!cookie.getValue().equals(trainer.getMail())){
+					return "notLogged";
+				}
 			}
+		}
+		if(!cookieIsPres){
+			return "notLogged";
 		}
 		return "";
 	}
-
 	
 }
