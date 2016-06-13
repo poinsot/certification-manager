@@ -17,6 +17,10 @@ import javax.validation.constraints.NotNull;
 @Table(name="certification")
 public class Certification {
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	@Id
 	@GeneratedValue
 	@Column(name="id")
